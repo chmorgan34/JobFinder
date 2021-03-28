@@ -21,23 +21,22 @@ namespace JobFinder.Controllers
         }
 
         [Route("")]
-        public IActionResult Search()
+        public IActionResult Index()
         {
             return View(new SearchViewModel());
         }
 
         [Route("Search")]
-        [HttpPost]
         public async Task<IActionResult> Search(SearchViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                if (viewModel.AdzunaChecked)
+                if (viewModel.Adzuna)
                     viewModel.Results.AddRange(await apiHelper.GetAdzuna(viewModel));
 
             }
 
-            return View(viewModel);
+            return View("Index", viewModel);
         }
 
         [Route("Error")]

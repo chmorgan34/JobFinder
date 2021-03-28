@@ -7,17 +7,17 @@
 
 <div id="search-container">
     <section id="input-section">
-        <form asp-action="Search" method="post">
+        <form asp-action="Search" method="get">
             <fieldset>
                 <legend>Select job boards to include</legend>
 
                 <div>
-                    <input asp-for="AdzunaChecked" type="checkbox" />
-                    <label asp-for="AdzunaChecked"></label>
+                    <input asp-for="Adzuna" type="checkbox" />
+                    <label asp-for="Adzuna"></label>
                 </div>
                 <div>
-                    <input asp-for="GithubChecked" type="checkbox" />
-                    <label asp-for="GithubChecked"></label>
+                    <input asp-for="Github" type="checkbox" />
+                    <label asp-for="Github"></label>
                 </div>
             </fieldset>
 
@@ -52,8 +52,8 @@
                     <span asp-validation-for="MaxDaysOld"></span>
                 </div>
                 <div>
-                    <input asp-for="FullTimeOnlyChecked" type="checkbox" />
-                    <label asp-for="FullTimeOnlyChecked"></label>
+                    <input asp-for="FullTimeOnly" type="checkbox" />
+                    <label asp-for="FullTimeOnly"></label>
                 </div>
             </fieldset>
 

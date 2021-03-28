@@ -49,7 +49,7 @@ namespace JobFinder.Models
                 url += $"&max_days_old={viewModel.MaxDaysOld}";
             if (viewModel.MinSalary != null)
                 url += $"&salary_min={viewModel.MinSalary}";
-            if (viewModel.FullTimeOnlyChecked)
+            if (viewModel.FullTimeOnly)
                 url += "&full_time=1";
 
             Stream jsonStream;

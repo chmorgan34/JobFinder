@@ -13,19 +13,13 @@ namespace JobFinder.ViewModels
         public List<Job> Results { get; } = new List<Job>();
 
 
-        [Display(Name = "Adzuna")]
-        public bool AdzunaChecked { get; set; } = true;
+        public bool Adzuna { get; set; } = true;
 
         [Display(Name = "GitHub Jobs")]
-        public bool GithubChecked { get; set; } = true;
+        public bool Github { get; set; } = true;
 
-        [Display(Name = "Country")]
         public string Country { get; set; } = "us";
-
-        [Display(Name = "Description")]
         public string Description { get; set; } = null;
-
-        [Display(Name = "Location")]
         public string Location { get; set; } = null;
 
         [Range(1, int.MaxValue, ErrorMessage = "Distance must be at least 1")]
@@ -41,7 +35,7 @@ namespace JobFinder.ViewModels
         public int? MaxDaysOld { get; set; } = null;
 
         [Display(Name = "Full-time only")]
-        public bool FullTimeOnlyChecked { get; set; } = true;
+        public bool FullTimeOnly { get; set; } = true;
 
         [Range(1, int.MaxValue)]
         public int Page { get; set; } = 1;
