@@ -1,0 +1,111 @@
+﻿@model SearchViewModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h2>Job Search</h2>
+
+<div id="search-container">
+    <section id="input-section">
+        <form asp-action="Search" method="post">
+            <fieldset>
+                <legend>Select job boards to include</legend>
+
+                <div>
+                    <input asp-for="AdzunaChecked" type="checkbox" />
+                    <label asp-for="AdzunaChecked"></label>
+                </div>
+                <div>
+                    <input asp-for="GithubChecked" type="checkbox" />
+                    <label asp-for="GithubChecked"></label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Enter search parameters</legend>
+
+                <div class="searchParam">
+                    <label asp-for="Country"></label>
+                    <select asp-for="Country" asp-items="Model.Countries"></select>
+                </div>
+                <div class="searchParam">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" type="text" placeholder=".NET developer" />
+                </div>
+                <div class="searchParam">
+                    <label asp-for="Location"></label>
+                    <input asp-for="Location" type="text" placeholder="Tempe, AZ" />
+                </div>
+                <div class="searchParam">
+                    <label asp-for="Distance"></label>
+                    <input asp-for="Distance" type="number" placeholder="5" />
+                    <span asp-validation-for="Distance"></span>
+                </div>
+                <div class="searchParam">
+                    <label asp-for="MinSalary"></label>
+                    <input asp-for="MinSalary" type="number" placeholder="75000" />
+                    <span asp-validation-for="MinSalary"></span>
+                </div>
+                <div class="searchParam">
+                    <label asp-for="MaxDaysOld"></label>
+                    <input asp-for="MaxDaysOld" type="number" placeholder="2" />
+                    <span asp-validation-for="MaxDaysOld"></span>
+                </div>
+                <div>
+                    <input asp-for="FullTimeOnlyChecked" type="checkbox" />
+                    <label asp-for="FullTimeOnlyChecked"></label>
+                </div>
+            </fieldset>
+
+            <input type="submit" value="Search" />
+        </form>
+    </section>
+
+    <section id="output-section">
+        <table>
+            <colgroup>
+                <col />
+                <col id="desc-col" />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Age</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Min Salary</th>
+                    <th>Max Salary</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var job in Model.Results)
+                {
+                    <tr>
+                        <td>@job.Title</td>
+                        <td>
+                            <details>
+                                <summary>Click to expand</summary>
+                                <hr />
+                                <p>@job.Description</p>
+                            </details>
+                        </td>
+                        <td>@job.CreatedAt</td>
+                        <td>@job.Company</td>
+                        <td>@job.Location</td>
+                        <td>@job.SalaryMin</td>
+                        <td>@job.SalaryMax</td>
+                        <td><a href="@job.URL">Link</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>

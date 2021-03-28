@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - JobFinder</title>
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    </head>
+
+    <body>
+        <header>
+            <nav id="main-nav">
+                <ul>
+                    <li><a asp-controller="Search" asp-action="Search">Search</a></li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li><a href="#">My jobs</a></li>
+                    }
+                </ul>
+                <span>JobFinder</span>
+                <ul>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li><a href="#">Settings</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="#">Sign in</a></li>
+                        <li><a href="#">Register</a></li>
+                    }
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            @RenderBody()
+        </main>
+
+        <footer>
+            <small>&copy; 2021 Charles Morgan</small>
+        </footer>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+</html>

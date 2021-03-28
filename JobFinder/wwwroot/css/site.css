@@ -1,0 +1,81 @@
+﻿
+/* <------------------ _Layout -------------------> */
+header {
+    border-bottom: 1px solid black;
+}
+#main-nav {
+    display: flex;
+    justify-content: space-between;
+}
+#main-nav ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+#main-nav li {
+    display: inline-block;
+}
+#main-nav a {
+    font-size: 1.5rem;
+}
+#main-nav span {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+main {
+    margin-bottom: 1rem;
+}
+footer {
+    border-top: 1px solid black;
+}
+/* ------------------------------------------------ */
+
+
+/* <------------------- Search -------------------> */
+#search-container {
+    display: flex;
+}
+
+#input-section {
+    min-width: max-content;
+    padding-right: 0.75rem;
+    border-right: 1px solid black;
+    margin-right: 0.75rem;
+}
+#input-section form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#input-section .searchParam {
+    margin-bottom: 0.5rem;
+}
+#input-section .searchParam > * {
+    display: block;
+}
+#input-section .searchParam span {
+    color: red;
+    font-size: 0.75rem;
+    text-align: center;
+}
+#input-section input[type=submit] {
+    margin-top: 0.5rem;
+}
+
+#output-section {
+    flex-grow: 1;
+}
+#output-section table, th, td {
+    border: 1px solid darkgray;
+    border-collapse: collapse;
+    padding: 0.35rem;
+}
+#output-section table #desc-col {
+    width: 50%;
+}
+#output-section table details summary {
+    cursor: pointer;
+}
+/* ------------------------------------------------ */
+
+
