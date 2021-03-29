@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 namespace JobFinder.Controllers
 {
     [Route("")]
-    public class SearchController : Controller
+    public class HomeController : Controller
     {
         private readonly IApiHelper apiHelper;
 
-        public SearchController(IApiHelper apiHelper)
+        public HomeController(IApiHelper apiHelper)
         {
             this.apiHelper = apiHelper;
         }

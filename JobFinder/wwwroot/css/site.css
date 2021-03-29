@@ -71,7 +71,7 @@ footer {
     padding: 0.35rem;
 }
 #output-section table #desc-col {
-    width: 50%;
+    width: 40%;
 }
 #output-section table details summary {
     cursor: pointer;
