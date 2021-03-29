@@ -51,7 +51,7 @@ namespace JobFinder
             }
             else
             {
-                app.UseExceptionHandler("Error");
+                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -65,7 +65,7 @@ namespace JobFinder
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "Default",
+                    name: "default",
                     pattern: "{controller}/{action}");
                 endpoints.MapRazorPages();
             });

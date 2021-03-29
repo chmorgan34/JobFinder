@@ -1,4 +1,24 @@
-﻿
+﻿/* <------------------ Globals -------------------> */
+.loadingSpinner {
+    border: 0.5rem solid #f3f3f3;
+    border-top: 0.5rem solid #3498db;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/* ------------------------------------------------ */
+
+
 /* <------------------ _Layout -------------------> */
 header {
     border-bottom: 1px solid black;
@@ -31,6 +51,24 @@ footer {
 /* ------------------------------------------------ */
 
 
+/* <-------------- _JobListPartial ---------------> */
+#results-table {
+    width: 100%;
+}
+#results-table, #results-table th, #results-table td {
+    border: 1px solid darkgray;
+    border-collapse: collapse;
+    padding: 0.35rem;
+}
+#desc-col {
+    width: 40%;
+}
+#results-table details summary {
+    cursor: pointer;
+}
+/* ------------------------------------------------ */
+
+
 /* <------------------- Search -------------------> */
 #search-container {
     display: flex;
@@ -42,40 +80,30 @@ footer {
     border-right: 1px solid black;
     margin-right: 0.75rem;
 }
-#input-section form {
+#search-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-#input-section .searchParam {
+.searchParam {
     margin-bottom: 0.5rem;
 }
-#input-section .searchParam > * {
+.searchParam > * {
     display: block;
 }
-#input-section .searchParam span {
+.validationMessage {
     color: red;
-    font-size: 0.75rem;
+    font-size: 0.80rem;
     text-align: center;
 }
-#input-section input[type=submit] {
+#search-form input[type=submit] {
     margin-top: 0.5rem;
 }
 
 #output-section {
     flex-grow: 1;
-}
-#output-section table, th, td {
-    border: 1px solid darkgray;
-    border-collapse: collapse;
-    padding: 0.35rem;
-}
-#output-section table #desc-col {
-    width: 40%;
-}
-#output-section table details summary {
-    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 /* ------------------------------------------------ */
-
-

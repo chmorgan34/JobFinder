@@ -1,0 +1,47 @@
+﻿@model List<Job>
+
+<table id="results-table">
+    <colgroup>
+        <col />
+        <col id="desc-col" />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Age</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Min Salary</th>
+            <th>Max Salary</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Title</td>
+                <td>
+                    <details>
+                        <summary>Click to expand</summary>
+                        <hr />
+                        <p>@job.Description</p>
+                    </details>
+                </td>
+                <td>@job.CreatedAt</td>
+                <td>@job.Company</td>
+                <td>@job.Location</td>
+                <td>@job.SalaryMin</td>
+                <td>@job.SalaryMax</td>
+                <td><a href="@job.URL">Link</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

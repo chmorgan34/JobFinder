@@ -3,11 +3,10 @@
     ViewData["Title"] = "Search";
 }
 
-<h2>Job Search</h2>
 
 <div id="search-container">
     <section id="input-section">
-        <form asp-action="Search" method="get">
+        <form asp-action="Search" method="get" id="search-form">
             <fieldset>
                 <legend>Select job boards to include</legend>
 
@@ -39,17 +38,17 @@
                 <div class="searchParam">
                     <label asp-for="Distance"></label>
                     <input asp-for="Distance" type="number" placeholder="5" />
-                    <span asp-validation-for="Distance"></span>
+                    <span asp-validation-for="Distance" class="validationMessage"></span>
                 </div>
                 <div class="searchParam">
                     <label asp-for="MinSalary"></label>
                     <input asp-for="MinSalary" type="number" placeholder="75000" />
-                    <span asp-validation-for="MinSalary"></span>
+                    <span asp-validation-for="MinSalary" class="validationMessage"></span>
                 </div>
                 <div class="searchParam">
                     <label asp-for="MaxDaysOld"></label>
                     <input asp-for="MaxDaysOld" type="number" placeholder="2" />
-                    <span asp-validation-for="MaxDaysOld"></span>
+                    <span asp-validation-for="MaxDaysOld" class="validationMessage"></span>
                 </div>
                 <div>
                     <input asp-for="FullTimeOnly" type="checkbox" />
@@ -62,54 +61,22 @@
     </section>
 
     <section id="output-section">
-        <table>
-            <colgroup>
-                <col />
-                <col id="desc-col" />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Age</th>
-                    <th>Company</th>
-                    <th>Location</th>
-                    <th>Min Salary</th>
-                    <th>Max Salary</th>
-                    <th>URL</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var job in Model.Results)
-                {
-                    <tr>
-                        <td>@job.Title</td>
-                        <td>
-                            <details>
-                                <summary>Click to expand</summary>
-                                <hr />
-                                <p>@job.Description</p>
-                            </details>
-                        </td>
-                        <td>@job.CreatedAt</td>
-                        <td>@job.Company</td>
-                        <td>@job.Location</td>
-                        <td>@job.SalaryMin</td>
-                        <td>@job.SalaryMax</td>
-                        <td><a href="@job.URL">Link</a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @if (Model.Results != null)
+        {
+            <partial name="_JobListPartial" model="Model.Results" />
+        }
     </section>
 </div>
 
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const form = $('#search-form');
+        form.submit(function (event) {
+            if (form.valid()) {
+                $('#output-section').html('<div class="loadingSpinner"></div>');
+            }
+        });
+    </script>
 }

@@ -31,9 +31,12 @@ namespace JobFinder.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (viewModel.Adzuna)
-                    viewModel.Results.AddRange(await apiHelper.GetAdzuna(viewModel));
+                var results = new List<Job>();
 
+                if (viewModel.Adzuna)
+                    results.AddRange(await apiHelper.GetAdzuna(viewModel));
+
+                viewModel.Results = results;
             }
 
             return View("Index", viewModel);

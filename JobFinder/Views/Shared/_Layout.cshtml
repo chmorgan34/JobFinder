@@ -11,7 +11,7 @@
         <header>
             <nav id="main-nav">
                 <ul>
-                    <li><a asp-controller="Search" asp-action="Index">Search</a></li>
+                    <li><a href="/">Search</a></li>
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li><a href="#">My jobs</a></li>
@@ -33,6 +33,7 @@
         </header>
 
         <main>
+            <h2>@ViewData["Title"]</h2>
             @RenderBody()
         </main>
 

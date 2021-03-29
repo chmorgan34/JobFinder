@@ -10,14 +10,17 @@ namespace JobFinder.ViewModels
 {
     public class SearchViewModel
     {
-        public List<Job> Results { get; } = new List<Job>();
+        public List<Job> Results { get; set; } = null;
 
 
+        // Job boards
         public bool Adzuna { get; set; } = true;
 
         [Display(Name = "GitHub Jobs")]
         public bool Github { get; set; } = true;
 
+
+        // Search parameters
         public string Country { get; set; } = "us";
         public string Description { get; set; } = null;
         public string Location { get; set; } = null;
