@@ -86,15 +86,22 @@ footer {
     align-items: center;
 }
 .searchParam {
-    margin-bottom: 0.5rem;
-}
-.searchParam > * {
-    display: block;
+    margin-bottom: 0.75rem;
 }
 .validationMessage {
     color: red;
-    font-size: 0.80rem;
-    text-align: center;
+}
+.paramNote {
+    font-size: 0.75rem;
+}
+.paramNote ul {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 1rem;
+}
+#sort-options {
+    border-top: 1px solid black;
+    padding-top: 0.5rem;
 }
 #search-form input[type=submit] {
     margin-top: 0.5rem;

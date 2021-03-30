@@ -24,35 +24,46 @@
                 <legend>Enter search parameters</legend>
 
                 <div class="searchParam">
-                    <label asp-for="Country"></label>
+                    <label asp-for="Country"></label><br />
                     <select asp-for="Country" asp-items="Model.Countries"></select>
                 </div>
                 <div class="searchParam">
-                    <label asp-for="Description"></label>
+                    <label asp-for="Description"></label><br />
                     <input asp-for="Description" type="text" placeholder=".NET developer" />
                 </div>
                 <div class="searchParam">
-                    <label asp-for="Location"></label>
+                    <label asp-for="Location"></label><br />
                     <input asp-for="Location" type="text" placeholder="Tempe, AZ" />
                 </div>
                 <div class="searchParam">
-                    <label asp-for="Distance"></label>
-                    <input asp-for="Distance" type="number" placeholder="5" />
+                    <label asp-for="Distance"></label><br />
+                    <input asp-for="Distance" type="number" placeholder="5" /><br />
                     <span asp-validation-for="Distance" class="validationMessage"></span>
+                    <div class="paramNote">
+                        Note:
+                        <ul>
+                            <li>GitHub Jobs does not support distance information.</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="searchParam">
-                    <label asp-for="MinSalary"></label>
-                    <input asp-for="MinSalary" type="number" placeholder="75000" />
+                    <label asp-for="MinSalary"></label><br />
+                    <input asp-for="MinSalary" type="number" placeholder="75000" /><br />
                     <span asp-validation-for="MinSalary" class="validationMessage"></span>
+                    <div class="paramNote">
+                        Note:
+                        <ul>
+                            <li>GitHub Jobs does not support salary information.</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="searchParam">
-                    <label asp-for="MaxDaysOld"></label>
-                    <input asp-for="MaxDaysOld" type="number" placeholder="2" />
-                    <span asp-validation-for="MaxDaysOld" class="validationMessage"></span>
-                </div>
-                <div>
                     <input asp-for="FullTimeOnly" type="checkbox" />
                     <label asp-for="FullTimeOnly"></label>
+                </div>
+                <div id="sort-options">
+                    <label asp-for="SortBy"></label>
+                    <select asp-for="SortBy" asp-items="Model.SortTypes"></select>
                 </div>
             </fieldset>
 
@@ -63,7 +74,14 @@
     <section id="output-section">
         @if (Model.Results != null)
         {
-            <partial name="_JobListPartial" model="Model.Results" />
+            if (Model.Results.Count == 0)
+            {
+                <span>No jobs found :(</span>
+            }
+            else
+            {
+                <partial name="_JobListPartial" model="Model.Results" />
+            }
         }
     </section>
 </div>

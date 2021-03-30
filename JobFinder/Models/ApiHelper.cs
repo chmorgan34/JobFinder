@@ -15,6 +15,7 @@ namespace JobFinder.Models
     public interface IApiHelper
     {
         Task<List<Job>> GetAdzuna(SearchViewModel viewModel);
+        Task<List<Job>> GetGithub(SearchViewModel viewModel);
     }
 
     public class ApiHelper : IApiHelper
@@ -38,15 +39,14 @@ namespace JobFinder.Models
             var url = $"https://api.adzuna.com/v1/api/jobs/{viewModel.Country}/search/{viewModel.Page}" +
                 $"?app_id={adzunaAppID}" +
                 $"&app_key={adzunaAppKey}" +
-                "&results_per_page=50";
+                "&results_per_page=50" +
+                $"&sort_by={viewModel.SortBy}";
             if (viewModel.Description != null)
                 url += $"&what={viewModel.Description}";
             if (viewModel.Location != null)
                 url += $"&where={viewModel.Location}";
             if (viewModel.Distance != null)
                 url += $"&distance={viewModel.Distance}";
-            if (viewModel.MaxDaysOld != null)
-                url += $"&max_days_old={viewModel.MaxDaysOld}";
             if (viewModel.MinSalary != null)
                 url += $"&salary_min={viewModel.MinSalary}";
             if (viewModel.FullTimeOnly)
@@ -85,6 +85,57 @@ namespace JobFinder.Models
                     URL = job.URL,
                     SalaryMin = job.SalaryMin,
                     SalaryMax = job.SalaryMax
+                });
+            }
+
+            return results;
+        }
+
+        public async Task<List<Job>> GetGithub(SearchViewModel viewModel)
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var url = "https://jobs.github.com/positions.json?description=";
+            if (viewModel.Description != null)
+                url += viewModel.Description;
+            url += "&location=";
+            if (viewModel.Location != null)
+                url += viewModel.Location;
+            if (viewModel.FullTimeOnly)
+                url += "&full_time=on";
+
+            Stream jsonStream;
+            try
+            {
+                jsonStream = await client.GetStreamAsync(url);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("GitHub request failed", e);
+            }
+
+            List<GithubJob> githubJobs;
+            try
+            {
+                githubJobs = await JsonSerializer.DeserializeAsync<List<GithubJob>>(jsonStream);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("GitHub JSON deserialization failed", e);
+            }
+
+            var results = new List<Job>();
+            foreach (var job in githubJobs)
+            {
+                results.Add(new Job
+                {
+                    Title = job.Title,
+                    Description = Regex.Replace(job.DescriptionHTML, "<.*?>", string.Empty),
+                    CreatedAt = job.GetDateTime(),
+                    Company = job.Company,
+                    Location = job.Location,
+                    URL = job.URL
                 });
             }
 

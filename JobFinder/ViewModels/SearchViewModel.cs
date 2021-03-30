@@ -10,7 +10,7 @@ namespace JobFinder.ViewModels
 {
     public class SearchViewModel
     {
-        public List<Job> Results { get; set; } = null;
+        public List<Job> Results { get; set; }
 
 
         // Job boards
@@ -22,23 +22,22 @@ namespace JobFinder.ViewModels
 
         // Search parameters
         public string Country { get; set; } = "us";
-        public string Description { get; set; } = null;
-        public string Location { get; set; } = null;
+        public string Description { get; set; }
+        public string Location { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Distance must be at least 1")]
         [Display(Name = "Distance (in kilometers)")]
-        public int? Distance { get; set; } = null;
+        public int? Distance { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Minimum salary can't be less than 0")]
         [Display(Name = "Minimum salary")]
-        public int? MinSalary { get; set; } = null;
-
-        [Range(0, int.MaxValue, ErrorMessage = "Max days old can't be less than 0")]
-        [Display(Name = "Max days old")]
-        public int? MaxDaysOld { get; set; } = null;
+        public int? MinSalary { get; set; }
 
         [Display(Name = "Full-time only")]
         public bool FullTimeOnly { get; set; } = true;
+
+        [Display(Name = "Sort by")]
+        public string SortBy { get; set; } = "date";
 
         [Range(1, int.MaxValue)]
         public int Page { get; set; } = 1;
@@ -46,7 +45,7 @@ namespace JobFinder.ViewModels
 
         public List<SelectListItem> Countries { get; } = new List<SelectListItem>
         {
-            new SelectListItem { Value = "us", Text = "United States"},
+            new SelectListItem { Value = "us", Text = "United States" },
             new SelectListItem { Value = "at", Text = "Austria" },
             new SelectListItem { Value = "br", Text = "Brazil" },
             new SelectListItem { Value = "ca", Text = "Canada" },
@@ -61,6 +60,11 @@ namespace JobFinder.ViewModels
             new SelectListItem { Value = "sg", Text = "Singapore" },
             new SelectListItem { Value = "za", Text = "South Africa" },
             new SelectListItem { Value = "gb", Text = "United Kingdom" }
+        };
+        public List<SelectListItem> SortTypes { get; } = new List<SelectListItem>
+        {
+            new SelectListItem { Value = "date", Text = "Date" },
+            new SelectListItem { Value = "salary", Text = "Salary" }
         };
     }
 }

@@ -35,6 +35,11 @@ namespace JobFinder.Controllers
 
                 if (viewModel.Adzuna)
                     results.AddRange(await apiHelper.GetAdzuna(viewModel));
+                if (viewModel.Github)
+                    results.AddRange(await apiHelper.GetGithub(viewModel));
+
+                if (viewModel.SortBy == "date")
+                    results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));
 
                 viewModel.Results = results;
             }

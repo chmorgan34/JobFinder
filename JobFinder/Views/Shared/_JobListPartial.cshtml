@@ -15,7 +15,7 @@
         <tr>
             <th>Title</th>
             <th>Description</th>
-            <th>Age</th>
+            <th>Created</th>
             <th>Company</th>
             <th>Location</th>
             <th>Min Salary</th>
@@ -35,7 +35,7 @@
                         <p>@job.Description</p>
                     </details>
                 </td>
-                <td>@job.CreatedAt</td>
+                <td><time datetime="@job.CreatedAt">@job.CreatedAt</time></td>
                 <td>@job.Company</td>
                 <td>@job.Location</td>
                 <td>@job.SalaryMin</td>
