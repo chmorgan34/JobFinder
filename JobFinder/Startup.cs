@@ -30,7 +30,8 @@ namespace JobFinder
             // services.AddHttpClient()
             services.AddSingleton<IApiHelper>(serviceProvider => new ApiHelper(
                 adzunaAppID: Configuration["AdzunaAppID"],
-                adzunaAppKey: Configuration["AdzunaAppKey"]));
+                adzunaAppKey: Configuration["AdzunaAppKey"],
+                joobleApiKey: Configuration["JoobleApiKey"]));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

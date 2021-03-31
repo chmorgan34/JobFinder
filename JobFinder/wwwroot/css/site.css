@@ -54,6 +54,8 @@ footer {
 /* <-------------- _JobListPartial ---------------> */
 #results-table {
     width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 #results-table, #results-table th, #results-table td {
     border: 1px solid darkgray;
@@ -102,6 +104,7 @@ footer {
 #sort-options {
     border-top: 1px solid black;
     padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 #search-form input[type=submit] {
     margin-top: 0.5rem;
@@ -110,6 +113,7 @@ footer {
 #output-section {
     flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }

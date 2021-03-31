@@ -21,7 +21,9 @@ namespace JobFinder.ViewModels
 
 
         // Search parameters
+        [Required]
         public string Country { get; set; } = "us";
+
         public string Description { get; set; }
         public string Location { get; set; }
 
@@ -39,6 +41,7 @@ namespace JobFinder.ViewModels
         [Display(Name = "Sort by")]
         public string SortBy { get; set; } = "date";
 
+        [Required]
         [Range(1, int.MaxValue)]
         public int Page { get; set; } = 1;
 

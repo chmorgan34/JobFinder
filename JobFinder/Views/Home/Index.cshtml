@@ -65,6 +65,10 @@
                     <label asp-for="SortBy"></label>
                     <select asp-for="SortBy" asp-items="Model.SortTypes"></select>
                 </div>
+                <div>
+                    <label asp-for="Page"></label>
+                    <input asp-for="Page" type="number" placeholder="1" />
+                </div>
             </fieldset>
 
             <input type="submit" value="Search" />

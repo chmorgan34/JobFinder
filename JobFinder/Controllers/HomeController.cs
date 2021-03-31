@@ -27,24 +27,24 @@ namespace JobFinder.Controllers
         }
 
         [Route("Search")]
-        public async Task<IActionResult> Search(SearchViewModel viewModel)
+        public async Task<IActionResult> Search(SearchViewModel searchVM)
         {
             if (ModelState.IsValid)
             {
                 var results = new List<Job>();
 
-                if (viewModel.Adzuna)
-                    results.AddRange(await apiHelper.GetAdzuna(viewModel));
-                if (viewModel.Github)
-                    results.AddRange(await apiHelper.GetGithub(viewModel));
+                if (searchVM.Adzuna)
+                    results.AddRange(await apiHelper.GetAdzuna(searchVM));
+                if (searchVM.Github)
+                    results.AddRange(await apiHelper.GetGithub(searchVM));
 
-                if (viewModel.SortBy == "date")
+                if (searchVM.SortBy == "date")
                     results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));
 
-                viewModel.Results = results;
+                searchVM.Results = results;
             }
 
-            return View("Index", viewModel);
+            return View("Index", searchVM);
         }
 
         [Route("Error")]

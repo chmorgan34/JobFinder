@@ -14,8 +14,9 @@ namespace JobFinder.Models
 {
     public interface IApiHelper
     {
-        Task<List<Job>> GetAdzuna(SearchViewModel viewModel);
-        Task<List<Job>> GetGithub(SearchViewModel viewModel);
+        Task<List<Job>> GetAdzuna(SearchViewModel searchVM);
+        Task<List<Job>> GetGithub(SearchViewModel searchVM);
+        Task<List<Job>> GetJooble(SearchViewModel searchVM);
     }
 
     public class ApiHelper : IApiHelper
@@ -23,33 +24,35 @@ namespace JobFinder.Models
         private readonly HttpClient client;
         private readonly string adzunaAppID;
         private readonly string adzunaAppKey;
+        private readonly string joobleApiKey;
 
-        public ApiHelper(string adzunaAppID, string adzunaAppKey)
+        public ApiHelper(string adzunaAppID, string adzunaAppKey, string joobleApiKey)
         {
             client = new HttpClient();
             this.adzunaAppID = adzunaAppID;
             this.adzunaAppKey = adzunaAppKey;
+            this.joobleApiKey = joobleApiKey;
         }
 
-        public async Task<List<Job>> GetAdzuna(SearchViewModel viewModel)
+        public async Task<List<Job>> GetAdzuna(SearchViewModel searchVM)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var url = $"https://api.adzuna.com/v1/api/jobs/{viewModel.Country}/search/{viewModel.Page}" +
+            var url = $"https://api.adzuna.com/v1/api/jobs/{searchVM.Country}/search/{searchVM.Page}" +
                 $"?app_id={adzunaAppID}" +
                 $"&app_key={adzunaAppKey}" +
                 "&results_per_page=50" +
-                $"&sort_by={viewModel.SortBy}";
-            if (viewModel.Description != null)
-                url += $"&what={viewModel.Description}";
-            if (viewModel.Location != null)
-                url += $"&where={viewModel.Location}";
-            if (viewModel.Distance != null)
-                url += $"&distance={viewModel.Distance}";
-            if (viewModel.MinSalary != null)
-                url += $"&salary_min={viewModel.MinSalary}";
-            if (viewModel.FullTimeOnly)
+                $"&sort_by={searchVM.SortBy}";
+            if (searchVM.Description != null)
+                url += $"&what={searchVM.Description}";
+            if (searchVM.Location != null)
+                url += $"&where={searchVM.Location}";
+            if (searchVM.Distance != null)
+                url += $"&distance={searchVM.Distance}";
+            if (searchVM.MinSalary != null)
+                url += $"&salary_min={searchVM.MinSalary}";
+            if (searchVM.FullTimeOnly)
                 url += "&full_time=1";
 
             Stream jsonStream;
@@ -91,18 +94,17 @@ namespace JobFinder.Models
             return results;
         }
 
-        public async Task<List<Job>> GetGithub(SearchViewModel viewModel)
+        public async Task<List<Job>> GetGithub(SearchViewModel searchVM)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var url = "https://jobs.github.com/positions.json?description=";
-            if (viewModel.Description != null)
-                url += viewModel.Description;
-            url += "&location=";
-            if (viewModel.Location != null)
-                url += viewModel.Location;
-            if (viewModel.FullTimeOnly)
+            var url = $"https://jobs.github.com/positions.json?page={searchVM.Page}";
+            if (searchVM.Description != null)
+                url += $"&description={searchVM.Description}";
+            if (searchVM.Location != null)
+                url += $"&location={searchVM.Location}";
+            if (searchVM.FullTimeOnly)
                 url += "&full_time=on";
 
             Stream jsonStream;
@@ -140,6 +142,11 @@ namespace JobFinder.Models
             }
 
             return results;
+        }
+
+        public Task<List<Job>> GetJooble(SearchViewModel searchVM)
+        {
+
         }
     }
 }
