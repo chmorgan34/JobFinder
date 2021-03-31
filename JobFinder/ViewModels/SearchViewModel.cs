@@ -18,18 +18,19 @@ namespace JobFinder.ViewModels
 
         [Display(Name = "GitHub Jobs")]
         public bool Github { get; set; } = true;
+        public bool Reed { get; set; } = true;
 
 
         // Search parameters
         [Required]
         public string Country { get; set; } = "us";
 
-        public string Description { get; set; }
+        public string Keywords { get; set; }
         public string Location { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Distance must be at least 1")]
-        [Display(Name = "Distance (in kilometers)")]
-        public int? Distance { get; set; }
+        [Display(Name = "Distance (in miles)")]
+        public int? MilesAway { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Minimum salary can't be less than 0")]
         [Display(Name = "Minimum salary")]

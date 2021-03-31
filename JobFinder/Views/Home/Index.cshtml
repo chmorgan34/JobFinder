@@ -18,6 +18,10 @@
                     <input asp-for="Github" type="checkbox" />
                     <label asp-for="Github"></label>
                 </div>
+                <div>
+                    <input asp-for="Reed" type="checkbox" />
+                    <label asp-for="Reed"></label>
+                </div>
             </fieldset>
 
             <fieldset>
@@ -28,17 +32,17 @@
                     <select asp-for="Country" asp-items="Model.Countries"></select>
                 </div>
                 <div class="searchParam">
-                    <label asp-for="Description"></label><br />
-                    <input asp-for="Description" type="text" placeholder=".NET developer" />
+                    <label asp-for="Keywords"></label><br />
+                    <input asp-for="Keywords" type="text" placeholder=".NET developer" />
                 </div>
                 <div class="searchParam">
                     <label asp-for="Location"></label><br />
                     <input asp-for="Location" type="text" placeholder="Tempe, AZ" />
                 </div>
                 <div class="searchParam">
-                    <label asp-for="Distance"></label><br />
-                    <input asp-for="Distance" type="number" placeholder="5" /><br />
-                    <span asp-validation-for="Distance" class="validationMessage"></span>
+                    <label asp-for="MilesAway"></label><br />
+                    <input asp-for="MilesAway" type="number" placeholder="5" /><br />
+                    <span asp-validation-for="MilesAway" class="validationMessage"></span>
                     <div class="paramNote">
                         Note:
                         <ul>

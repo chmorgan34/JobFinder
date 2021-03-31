@@ -8,9 +8,6 @@ namespace JobFinder.Models.Deserializers
 {
     public class AdzunaRoot
     {
-        [JsonPropertyName("count")]
-        public int ResultCount { get; set; }
-
         [JsonPropertyName("results")]
         public List<AdzunaJob> Jobs { get; set; }
     }
@@ -33,10 +30,10 @@ namespace JobFinder.Models.Deserializers
         public string URL { get; set; }
 
         [JsonPropertyName("salary_max")]
-        public int? SalaryMax { get; set; }
+        public int? MinSalary { get; set; }
 
         [JsonPropertyName("salary_min")]
-        public int? SalaryMin { get; set; }
+        public int? MaxSalary { get; set; }
 
         [JsonPropertyName("title")]
         public string TitleHTML { get; set; }

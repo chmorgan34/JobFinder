@@ -14,7 +14,7 @@ namespace JobFinder.Models
         public string Location { get; set; }
         public string URL { get; set; }
 
-        public int? SalaryMin { get; set; }
-        public int? SalaryMax { get; set; }
+        public int? MinSalary { get; set; }
+        public int? MaxSalary { get; set; }
     }
 }
