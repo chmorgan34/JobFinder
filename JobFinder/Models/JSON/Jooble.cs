@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace JobFinder.Models.Deserializers
+namespace JobFinder.Models.JSON
 {
     public class JoobleRoot
     {
@@ -24,7 +25,7 @@ namespace JobFinder.Models.Deserializers
         public string Location { get; set; }
 
         [JsonPropertyName("snippet")]
-        public string Description { get; set; }
+        public string DescriptionHTML { get; set; }
 
         [JsonPropertyName("salary")]
         public string SalaryString { get; set; }
@@ -40,5 +41,29 @@ namespace JobFinder.Models.Deserializers
 
         [JsonPropertyName("updated")]
         public DateTime CreatedAt { get; set; }
+    }
+
+    public class JoobleRequest
+    {
+        [JsonPropertyName("keywords")]
+        public string Keywords { get; set; } = "";
+
+        [JsonPropertyName("location")]
+        public string Location { get; set; }
+
+        [JsonPropertyName("radius")]
+        public int? Distance { get; set; }
+
+        [JsonPropertyName("salary")]
+        public int? Salary { get; set; }
+
+        [JsonPropertyName("page")]
+        public int? Page { get; set; }
+
+        [JsonIgnore]
+        public static JsonSerializerOptions SerializerOptions { get; } = new()
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
     }
 }

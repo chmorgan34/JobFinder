@@ -1,4 +1,4 @@
-﻿using JobFinder.Models.Deserializers;
+﻿using JobFinder.Models.JSON;
 using JobFinder.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,46 +15,53 @@ namespace JobFinder.Models
 {
     public interface IApiHelper
     {
-        Task<List<Job>> GetAdzuna(SearchViewModel searchVM);
-        Task<List<Job>> GetGithubjobs(SearchViewModel searchVM);
-        Task<List<Job>> GetReed(SearchViewModel searchVM);
-        Task<List<Job>> GetUsajobs(SearchViewModel searchVM);
+        Task<List<Job>> GetAdzunaAsync(SearchViewModel searchVM);
+        Task<List<Job>> GetGithubjobsAsync(SearchViewModel searchVM);
+        Task<List<Job>> GetJoobleAsync(SearchViewModel searchVM);
+        Task<List<Job>> GetReedAsync(SearchViewModel searchVM);
+        Task<List<Job>> GetUsajobsAsync(SearchViewModel searchVM);
     }
 
     public class ApiHelper : IApiHelper
     {
         private readonly HttpClient adzunaClient;
         private readonly HttpClient githubClient;
+        private readonly HttpClient joobleClient;
         private readonly HttpClient reedClient;
         private readonly HttpClient usajobsClient;
         private readonly string adzunaAppID;
         private readonly string adzunaAppKey;
+        private readonly string joobleApiKey;
+        private readonly MediaTypeWithQualityHeaderValue jsonHeader;
 
-        public ApiHelper(string adzunaAppID, string adzunaAppKey, string reedApiKey, string usajobsApiKey, string usajobsUserAgent)
+        public ApiHelper(string adzunaAppID, string adzunaAppKey, string joobleApiKey, string reedApiKey, string usajobsApiKey, string usajobsUserAgent)
         {
-            var json = new MediaTypeWithQualityHeaderValue("application/json");
+            jsonHeader = new MediaTypeWithQualityHeaderValue("application/json");
 
             adzunaClient = new HttpClient();
-            adzunaClient.DefaultRequestHeaders.Accept.Add(json);
+            adzunaClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
+            this.adzunaAppID = adzunaAppID;
+            this.adzunaAppKey = adzunaAppKey;
 
             githubClient = new HttpClient();
-            githubClient.DefaultRequestHeaders.Accept.Add(json);
+            githubClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
+
+            joobleClient = new HttpClient();
+            joobleClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
+            this.joobleApiKey = joobleApiKey;
 
             reedClient = new HttpClient();
-            reedClient.DefaultRequestHeaders.Accept.Add(json);
+            reedClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
             var base64AuthString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{reedApiKey}:"));
             reedClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64AuthString);
 
             usajobsClient = new HttpClient();
-            usajobsClient.DefaultRequestHeaders.Accept.Add(json);
+            usajobsClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
             usajobsClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", usajobsUserAgent);
             usajobsClient.DefaultRequestHeaders.Add("Authorization-Key", usajobsApiKey);
-
-            this.adzunaAppID = adzunaAppID;
-            this.adzunaAppKey = adzunaAppKey;
         }
 
-        public async Task<List<Job>> GetAdzuna(SearchViewModel searchVM)
+        public async Task<List<Job>> GetAdzunaAsync(SearchViewModel searchVM)
         {
             string url = $"https://api.adzuna.com/v1/api/jobs/{searchVM.Country}/search/{searchVM.Page}" +
                 $"?app_id={adzunaAppID}" +
@@ -118,7 +126,7 @@ namespace JobFinder.Models
             return results;
         }
 
-        public async Task<List<Job>> GetGithubjobs(SearchViewModel searchVM)
+        public async Task<List<Job>> GetGithubjobsAsync(SearchViewModel searchVM)
         {
             string url = $"https://jobs.github.com/positions.json?page={searchVM.Page}";
             if (searchVM.Keywords != null)
@@ -167,7 +175,58 @@ namespace JobFinder.Models
             return results;
         }
 
-        public async Task<List<Job>> GetReed(SearchViewModel searchVM)
+        public async Task<List<Job>> GetJoobleAsync(SearchViewModel searchVM)
+        {
+            string url = $"https://jooble.org/api/{joobleApiKey}";
+            var joobleRequest = new JoobleRequest
+            {
+                Keywords = searchVM.Keywords,
+                Location = searchVM.Location,
+                Distance = searchVM.MilesAway,
+                Salary = searchVM.MinSalary,
+                Page = searchVM.Page
+            };
+
+            var response = await joobleClient.PostAsJsonAsync(url, joobleRequest, JoobleRequest.SerializerOptions);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Jooble request failed", e);
+            }
+
+            var jsonStream = await response.Content.ReadAsStreamAsync();
+
+            JoobleRoot root;
+            try
+            {
+                root = await JsonSerializer.DeserializeAsync<JoobleRoot>(jsonStream);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Jooble deserialization failed", e);
+            }
+
+            var results = new List<Job>();
+            foreach (var joobleJob in root.Jobs)
+            {
+                results.Add(new Job
+                {
+                    Title = joobleJob.Title,
+                    Description = Regex.Replace(joobleJob.DescriptionHTML, "<.*?>", string.Empty).Replace("&nbsp;", string.Empty),
+                    CreatedAt = joobleJob.CreatedAt,
+                    Company = joobleJob.Company,
+                    Location = joobleJob.Location,
+                    URL = joobleJob.URL
+                });
+            }
+
+            return results;
+        }
+
+        public async Task<List<Job>> GetReedAsync(SearchViewModel searchVM)
         {
             string url = $"https://www.reed.co.uk/api/1.0/search?resultsToSkip={(searchVM.Page - 1) * 100}";
             if (searchVM.Keywords != null)
@@ -225,7 +284,7 @@ namespace JobFinder.Models
             return results;
         }
 
-        public async Task<List<Job>> GetUsajobs(SearchViewModel searchVM)
+        public async Task<List<Job>> GetUsajobsAsync(SearchViewModel searchVM)
         {
             var url = $"https://data.usajobs.gov/api/Search?Page={searchVM.Page}";
             if (searchVM.Keywords != null)

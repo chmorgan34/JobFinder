@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace JobFinder.Models.Deserializers
+namespace JobFinder.Models.JSON
 {
     public class AdzunaRoot
     {

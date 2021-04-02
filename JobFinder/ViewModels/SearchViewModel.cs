@@ -18,6 +18,7 @@ namespace JobFinder.ViewModels
 
         [Display(Name = "GitHub Jobs")]
         public bool Github { get; set; } = true;
+        public bool Jooble { get; set; } = true;
         public bool Reed { get; set; } = true;
 
         [Display(Name = "USAJOBS")]
