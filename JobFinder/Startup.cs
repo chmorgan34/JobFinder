@@ -31,7 +31,9 @@ namespace JobFinder
             services.AddSingleton<IApiHelper>(serviceProvider => new ApiHelper(
                 adzunaAppID: Configuration["AdzunaAppID"],
                 adzunaAppKey: Configuration["AdzunaAppKey"],
-                reedApiKey: Configuration["ReedApiKey"]));
+                reedApiKey: Configuration["ReedApiKey"],
+                usajobsApiKey: Configuration["UsajobsApiKey"],
+                usajobsUserAgent: Configuration["UsajobsUserAgent"]));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

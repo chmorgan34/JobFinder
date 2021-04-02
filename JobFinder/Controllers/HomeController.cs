@@ -36,9 +36,11 @@ namespace JobFinder.Controllers
                 if (searchVM.Adzuna)
                     results.AddRange(await apiHelper.GetAdzuna(searchVM));
                 if (searchVM.Github)
-                    results.AddRange(await apiHelper.GetGithub(searchVM));
+                    results.AddRange(await apiHelper.GetGithubjobs(searchVM));
                 if (searchVM.Reed)
                     results.AddRange(await apiHelper.GetReed(searchVM));
+                if (searchVM.Usajobs)
+                    results.AddRange(await apiHelper.GetUsajobs(searchVM));
 
                 if (searchVM.SortBy == "date")
                     results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));

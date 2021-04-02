@@ -20,6 +20,10 @@ namespace JobFinder.ViewModels
         public bool Github { get; set; } = true;
         public bool Reed { get; set; } = true;
 
+        [Display(Name = "USAJOBS")]
+        public bool Usajobs { get; set; } = true;
+
+
 
         // Search parameters
         [Required]
