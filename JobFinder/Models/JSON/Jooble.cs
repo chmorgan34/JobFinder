@@ -31,7 +31,7 @@ namespace JobFinder.Models.JSON
         public string SalaryString { get; set; }
 
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string JobType { get; set; }
 
         [JsonPropertyName("link")]
         public string URL { get; set; }
@@ -46,7 +46,7 @@ namespace JobFinder.Models.JSON
     public class JoobleRequest
     {
         [JsonPropertyName("keywords")]
-        public string Keywords { get; set; } = "";
+        public string Keywords { get; set; }    // Error if null or empty
 
         [JsonPropertyName("location")]
         public string Location { get; set; }

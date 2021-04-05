@@ -38,6 +38,12 @@ namespace JobFinder.Models.JSON
         [JsonPropertyName("OrganizationName")]
         public string Company { get; set; }
 
+        [JsonPropertyName("PositionSchedule")]
+        public List<USAJobsPositionSchedule> PositionSchedule { get; set; }
+
+        [JsonPropertyName("PositionOfferingType")]
+        public List<USAJobsPositionOfferingType> OfferingType { get; set; }
+
         [JsonPropertyName("PositionRemuneration")]
         public List<USAJobsSalaryRange> SalaryRange { get; set; }
 
@@ -67,5 +73,17 @@ namespace JobFinder.Models.JSON
     {
         [JsonPropertyName("JobSummary")]
         public string Description { get; set; }
+    }
+
+    public class USAJobsPositionSchedule
+    {
+        [JsonPropertyName("Code")]
+        public string Code { get; set; }
+    }
+
+    public class USAJobsPositionOfferingType
+    {
+        [JsonPropertyName("Code")]
+        public string Code { get; set; }
     }
 }

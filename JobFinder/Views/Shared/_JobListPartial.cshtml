@@ -16,10 +16,11 @@
             <th>Title</th>
             <th>Description</th>
             <th>Created</th>
-            <th>Company</th>
-            <th>Location</th>
+            <th>Type</th>
             <th>Min Salary</th>
             <th>Max Salary</th>
+            <th>Location</th>
+            <th>Company</th>
             <th>URL</th>
         </tr>
     </thead>
@@ -35,11 +36,26 @@
                         <p>@job.Description</p>
                     </details>
                 </td>
-                <td><time datetime="@job.CreatedAt">@job.CreatedAt</time></td>
-                <td>@job.Company</td>
-                <td>@job.Location</td>
+                <td class="createdAt">
+                    <time datetime="@job.CreatedAt">
+                        @job.CreatedAt.ToShortDateString() <br />
+                        @if (job.CreatedAt.TimeOfDay != TimeSpan.Zero)
+                        {
+                            <span>@job.CreatedAt.ToShortTimeString()</span>
+                        }
+                    </time>
+                </td>
+                <td class="jobType">
+                    @if (job.ContractTime != null)
+                    {
+                        <span>@job.GetContractTime()</span> <br />
+                    }
+                    @job.ContractType
+                </td>
                 <td>@job.MinSalary</td>
                 <td>@job.MaxSalary</td>
+                <td>@job.Location</td>
+                <td>@job.Company</td>
                 <td><a href="@job.URL">Link</a></td>
             </tr>
         }

@@ -47,7 +47,7 @@ namespace JobFinder.Controllers
                 if (searchVM.SortBy == "date")
                     results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));
                 else if (searchVM.SortBy == "salary")
-                    results.Sort((x, y) => Nullable.Compare(y.MaxSalary, x.MaxSalary));
+                    results.Sort((x, y) => Nullable.Compare(y.MinSalary, x.MinSalary));
 
                 searchVM.Results = results;
             }

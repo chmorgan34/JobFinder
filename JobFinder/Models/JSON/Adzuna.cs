@@ -17,6 +17,12 @@ namespace JobFinder.Models.JSON
         [JsonPropertyName("company")]
         public AdzunaCompany Company { get; set; }
 
+        [JsonPropertyName("contract_time")]
+        public string ContractTime { get; set; }
+
+        [JsonPropertyName("contract_type")]
+        public string ContractType { get; set; }
+
         [JsonPropertyName("created")]
         public DateTime CreatedAt { get; set; }
 

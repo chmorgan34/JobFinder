@@ -33,26 +33,29 @@ namespace JobFinder.ViewModels
         public string Keywords { get; set; }
         public string Location { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Distance must be at least 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "Distance can't be less than 1!")]
         [Display(Name = "Distance (in miles)")]
         public int? MilesAway { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Minimum salary can't be less than 0")]
+        [Range(0, int.MaxValue, ErrorMessage = "Minimum salary can't be less than 0!")]
         [Display(Name = "Minimum salary")]
         public int? MinSalary { get; set; }
 
         [Display(Name = "Full-time only")]
         public bool FullTimeOnly { get; set; } = true;
 
+        [Display(Name = "Permanent only")]
+        public bool PermanentOnly { get; set; } = true;
+
         [Display(Name = "Sort by")]
         public string SortBy { get; set; } = "date";
 
         [Required]
-        [Range(1, int.MaxValue)]
+        [Range(1, int.MaxValue, ErrorMessage = "Page can't be less than 1!")]
         public int Page { get; set; } = 1;
 
 
-        public List<SelectListItem> Countries { get; } = new List<SelectListItem>
+        public List<SelectListItem> Countries { get; } = new()
         {
             new SelectListItem { Value = "us", Text = "United States" },
             new SelectListItem { Value = "at", Text = "Austria" },
@@ -70,7 +73,7 @@ namespace JobFinder.ViewModels
             new SelectListItem { Value = "za", Text = "South Africa" },
             new SelectListItem { Value = "gb", Text = "United Kingdom" }
         };
-        public List<SelectListItem> SortTypes { get; } = new List<SelectListItem>
+        public List<SelectListItem> SortTypes { get; } = new()
         {
             new SelectListItem { Value = "date", Text = "Date" },
             new SelectListItem { Value = "salary", Text = "Salary" }

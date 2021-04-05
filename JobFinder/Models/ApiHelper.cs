@@ -1,4 +1,5 @@
-﻿using JobFinder.Models.JSON;
+﻿using JobFinder.Models;
+using JobFinder.Models.JSON;
 using JobFinder.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,8 @@ namespace JobFinder.Models
                 url += $"&salary_min={searchVM.MinSalary}";
             if (searchVM.FullTimeOnly)
                 url += "&full_time=1";
+            if (searchVM.PermanentOnly)
+                url += "&permanent=1";
 
 
             Stream jsonStream;
@@ -96,21 +99,12 @@ namespace JobFinder.Models
                 throw new Exception("Adzuna request failed", e);
             }
 
-            AdzunaRoot root;
-            try
-            {
-                root = await JsonSerializer.DeserializeAsync<AdzunaRoot>(jsonStream);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Adzuna JSON deserialization failed", e);
-            }
-
+            var root = await JsonSerializer.DeserializeAsync<AdzunaRoot>(jsonStream);
 
             var results = new List<Job>();
             foreach (var adzunaJob in root.Jobs)
             {
-                results.Add(new Job
+                var job = new Job
                 {
                     Title = Regex.Replace(adzunaJob.TitleHTML, "<.*?>", string.Empty),
                     Description = Regex.Replace(adzunaJob.DescriptionHTML, "<.*?>", string.Empty),
@@ -120,7 +114,32 @@ namespace JobFinder.Models
                     URL = adzunaJob.URL,
                     MinSalary = adzunaJob.MaxSalary,
                     MaxSalary = adzunaJob.MinSalary
-                });
+                };
+
+                switch (adzunaJob.ContractTime)
+                {
+                    case "full_time":
+                        job.ContractTime = ContractTime.FullTime;
+                        break;
+                    case "part_time":
+                        job.ContractTime = ContractTime.PartTime;
+                        break;
+                    default:
+                        break;
+                }
+                switch (adzunaJob.ContractType)
+                {
+                    case "permanent":
+                        job.ContractType = ContractType.Permanent;
+                        break;
+                    case "contract":
+                        job.ContractType = ContractType.Temporary;
+                        break;
+                    default:
+                        break;
+                }
+
+                results.Add(job);
             }
 
             return results;
@@ -147,21 +166,12 @@ namespace JobFinder.Models
                 throw new Exception("GitHub request failed", e);
             }
 
-            List<GithubJob> githubJobs;
-            try
-            {
-                githubJobs = await JsonSerializer.DeserializeAsync<List<GithubJob>>(jsonStream);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("GitHub JSON deserialization failed", e);
-            }
-
+            var githubJobs = await JsonSerializer.DeserializeAsync<List<GithubJob>>(jsonStream);
 
             var results = new List<Job>();
             foreach (var githubJob in githubJobs)
             {
-                results.Add(new Job
+                var job = new Job
                 {
                     Title = githubJob.Title,
                     Description = Regex.Replace(githubJob.DescriptionHTML, "<.*?>", string.Empty),
@@ -169,7 +179,21 @@ namespace JobFinder.Models
                     Company = githubJob.Company,
                     Location = githubJob.Location,
                     URL = githubJob.URL
-                });
+                };
+
+                switch (githubJob.JobType)
+                {
+                    case "Full Time":
+                        job.ContractTime = ContractTime.FullTime;
+                        break;
+                    case "Part Time":
+                        job.ContractTime = ContractTime.PartTime;
+                        break;
+                    default:
+                        break;
+                }
+
+                results.Add(job);
             }
 
             return results;
@@ -198,21 +222,20 @@ namespace JobFinder.Models
             }
 
             var jsonStream = await response.Content.ReadAsStreamAsync();
-
-            JoobleRoot root;
-            try
-            {
-                root = await JsonSerializer.DeserializeAsync<JoobleRoot>(jsonStream);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Jooble deserialization failed", e);
-            }
+            var root = await JsonSerializer.DeserializeAsync<JoobleRoot>(jsonStream);
 
             var results = new List<Job>();
             foreach (var joobleJob in root.Jobs)
             {
-                results.Add(new Job
+                if (searchVM.FullTimeOnly && joobleJob.JobType != "Full-time")
+                    continue;
+                if (searchVM.PermanentOnly)
+                {
+                    if (joobleJob.JobType == "Temporary" || joobleJob.JobType == "Internship")
+                        continue;
+                }
+
+                var job = new Job
                 {
                     Title = joobleJob.Title,
                     Description = Regex.Replace(joobleJob.DescriptionHTML, "<.*?>", string.Empty).Replace("&nbsp;", string.Empty),
@@ -220,7 +243,25 @@ namespace JobFinder.Models
                     Company = joobleJob.Company,
                     Location = joobleJob.Location,
                     URL = joobleJob.URL
-                });
+                };
+
+                switch (joobleJob.JobType)
+                {
+                    case "Full-time":
+                        job.ContractTime = ContractTime.FullTime;
+                        break;
+                    case "Part-time":
+                        job.ContractTime = ContractTime.PartTime;
+                        break;
+                    case "Temporary":
+                    case "Internship":
+                        job.ContractType = ContractType.Temporary;
+                        break;
+                    default:
+                        break;
+                }
+
+                results.Add(job);
             }
 
             return results;
@@ -240,6 +281,8 @@ namespace JobFinder.Models
             }
             if (searchVM.FullTimeOnly)
                 url += "&fullTime=true";
+            if (searchVM.PermanentOnly)
+                url += "&permanent=true";
             if (searchVM.MinSalary != null)
                 url += $"&minimumSalary={searchVM.MinSalary}";
 
@@ -254,16 +297,7 @@ namespace JobFinder.Models
                 throw new Exception("Reed request failed", e);
             }
 
-            ReedRoot root;
-            try
-            {
-                root = await JsonSerializer.DeserializeAsync<ReedRoot>(jsonStream);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Reed JSON deserialization failed", e);
-            }
-
+            var root = await JsonSerializer.DeserializeAsync<ReedRoot>(jsonStream);
 
             var results = new List<Job>();
             foreach (ReedJob reedJob in root.Jobs)
@@ -300,6 +334,8 @@ namespace JobFinder.Models
             }
             if (searchVM.FullTimeOnly)
                 url += "&PositionSchedule=1";
+            if (searchVM.PermanentOnly)
+                url += "&PositionOfferingTypeCode=15317";
             if (searchVM.SortBy == "date")
                 url += "&SortField=OpenDate&SortDirection=Desc";
             else if (searchVM.SortBy == "salary")
@@ -316,21 +352,12 @@ namespace JobFinder.Models
                 throw new Exception("USAJOBS request failed", e);
             }
 
-            USAJobsRoot root;
-            try
-            {
-                root = await JsonSerializer.DeserializeAsync<USAJobsRoot>(jsonStream);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("USAJOBS JSON deserialization failed", e);
-            }
-
+            var root = await JsonSerializer.DeserializeAsync<USAJobsRoot>(jsonStream);
 
             var results = new List<Job>();
             foreach (var usajobsJob in root.SearchResult.Jobs)
             {
-                results.Add(new Job
+                var job = new Job
                 {
                     Title = usajobsJob.Details.Title,
                     Description = usajobsJob.Details.UserArea.Details.Description,
@@ -340,7 +367,30 @@ namespace JobFinder.Models
                     URL = usajobsJob.Details.URL,
                     MinSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MinSalary)),
                     MaxSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MaxSalary))
-                });
+                };
+
+                switch (usajobsJob.Details.PositionSchedule[0].Code)
+                {
+                    case "1":
+                        job.ContractTime = ContractTime.FullTime;
+                        break;
+                    case "2":
+                        job.ContractTime = ContractTime.PartTime;
+                        break;
+                    default:
+                        break;
+                }
+                switch (usajobsJob.Details.OfferingType[0].Code)
+                {
+                    case "15317":
+                        job.ContractType = ContractType.Permanent;
+                        break;
+                    default:
+                        job.ContractType = ContractType.Temporary;
+                        break;
+                }
+
+                results.Add(job);
             }
 
             return results;

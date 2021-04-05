@@ -8,6 +8,9 @@ namespace JobFinder.Models.JSON
 {
     public class GithubJob
     {
+        [JsonPropertyName("type")]
+        public string JobType { get; set; }
+
         [JsonPropertyName("url")]
         public string URL { get; set; }
 

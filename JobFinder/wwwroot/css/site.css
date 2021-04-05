@@ -1,4 +1,9 @@
 ﻿/* <------------------ Globals -------------------> */
+.validationMessage {
+    color: red;
+    font-size: 0.85rem;
+}
+
 .loadingSpinner {
     border: 0.5rem solid #f3f3f3;
     border-top: 0.5rem solid #3498db;
@@ -62,8 +67,11 @@ footer {
     border-collapse: collapse;
     padding: 0.35rem;
 }
-#desc-col {
+#results-table #desc-col {
     width: 40%;
+}
+#results-table .jobType, .createdAt {
+    white-space: nowrap;
 }
 #results-table details summary {
     cursor: pointer;
@@ -82,16 +90,16 @@ footer {
     border-right: 1px solid black;
     margin-right: 0.75rem;
 }
-#search-form {
+#input-section form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+#input-section fieldset {
+    margin-bottom: 0.5rem;
+}
 .searchParam {
     margin-bottom: 0.75rem;
-}
-.validationMessage {
-    color: red;
 }
 .paramNote {
     font-size: 0.75rem;
@@ -103,11 +111,14 @@ footer {
 }
 #sort-options {
     border-top: 1px solid black;
-    padding-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    padding-top: 0.75rem;
+    margin-bottom: 0.25rem;
 }
-#search-form input[type=submit] {
-    margin-top: 0.5rem;
+input#Page, input#MilesAway {
+    width: 3rem;
+}
+input#MinSalary {
+    width: 5rem;
 }
 
 #output-section {

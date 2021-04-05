@@ -6,7 +6,7 @@
 
 <div id="search-container">
     <section id="input-section">
-        <form asp-action="Search" method="get" id="search-form">
+        <form asp-action="Search" method="get">
             <fieldset>
                 <legend>Select job boards to include</legend>
 
@@ -51,27 +51,18 @@
                     <label asp-for="MilesAway"></label><br />
                     <input asp-for="MilesAway" type="number" placeholder="5" /><br />
                     <span asp-validation-for="MilesAway" class="validationMessage"></span>
-                    <div class="paramNote">
-                        Note:
-                        <ul>
-                            <li>GitHub Jobs does not support distance information.</li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="searchParam">
                     <label asp-for="MinSalary"></label><br />
                     <input asp-for="MinSalary" type="number" placeholder="75000" /><br />
                     <span asp-validation-for="MinSalary" class="validationMessage"></span>
-                    <div class="paramNote">
-                        Note:
-                        <ul>
-                            <li>GitHub Jobs does not support salary information.</li>
-                        </ul>
-                    </div>
                 </div>
                 <div class="searchParam">
                     <input asp-for="FullTimeOnly" type="checkbox" />
                     <label asp-for="FullTimeOnly"></label>
+                    <br />
+                    <input asp-for="PermanentOnly" type="checkbox" />
+                    <label asp-for="PermanentOnly"></label>
                 </div>
                 <div id="sort-options">
                     <label asp-for="SortBy"></label>
@@ -79,7 +70,8 @@
                 </div>
                 <div>
                     <label asp-for="Page"></label>
-                    <input asp-for="Page" type="number" placeholder="1" />
+                    <input asp-for="Page" type="number" placeholder="1" /><br />
+                    <span asp-validation-for="Page" class="validationMessage"></span>
                 </div>
             </fieldset>
 
@@ -106,7 +98,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        const form = $('#search-form');
+        const form = $('#input-section form');
         form.submit(function (event) {
             if (form.valid()) {
                 $('#output-section').html('<div class="loadingSpinner"></div>');
