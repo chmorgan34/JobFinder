@@ -10,8 +10,12 @@ namespace JobFinder.ViewModels
 {
     public class SearchViewModel
     {
+        // --------------- Output ---------------
         public List<Job> Results { get; set; }
+        public List<string> Errors { get; set; }
 
+
+        // --------------- Input ----------------
 
         // Job boards
         public bool Adzuna { get; set; } = true;
@@ -25,11 +29,9 @@ namespace JobFinder.ViewModels
         public bool Usajobs { get; set; } = true;
 
 
-
         // Search parameters
         [Required]
         public string Country { get; set; } = "us";
-
         public string Keywords { get; set; }
         public string Location { get; set; }
 

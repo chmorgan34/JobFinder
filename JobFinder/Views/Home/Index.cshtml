@@ -80,8 +80,25 @@
     </section>
 
     <section id="output-section">
-        @if (Model.Results != null)
+        @if (Model.Results == null)
         {
+            <span>Click "Search" to get started!</span>
+        }
+        else
+        {
+            if (Model.Errors.Count > 0)
+            {
+                <div id="search-errors">
+                    Note:
+                    <ul>
+                        @foreach (var error in Model.Errors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
             if (Model.Results.Count == 0)
             {
                 <span>No jobs found :(</span>

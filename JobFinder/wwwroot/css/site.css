@@ -101,14 +101,6 @@ footer {
 .searchParam {
     margin-bottom: 0.75rem;
 }
-.paramNote {
-    font-size: 0.75rem;
-}
-.paramNote ul {
-    margin-block-start: 0;
-    margin-block-end: 0;
-    padding-inline-start: 1rem;
-}
 #sort-options {
     border-top: 1px solid black;
     padding-top: 0.75rem;
@@ -124,6 +116,14 @@ input#MinSalary {
 #output-section {
     flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+#search-errors {
+    align-self: flex-start;
+}
+#search-errors ul {
+    margin-block: 0;
 }
 /* ------------------------------------------------ */

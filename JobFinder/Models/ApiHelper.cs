@@ -119,10 +119,10 @@ namespace JobFinder.Models
                 switch (adzunaJob.ContractTime)
                 {
                     case "full_time":
-                        job.ContractTime = ContractTime.FullTime;
+                        job.Schedule = JobSchedule.FullTime;
                         break;
                     case "part_time":
-                        job.ContractTime = ContractTime.PartTime;
+                        job.Schedule = JobSchedule.PartTime;
                         break;
                     default:
                         break;
@@ -130,10 +130,10 @@ namespace JobFinder.Models
                 switch (adzunaJob.ContractType)
                 {
                     case "permanent":
-                        job.ContractType = ContractType.Permanent;
+                        job.EmploymentType = EmploymentType.Permanent;
                         break;
                     case "contract":
-                        job.ContractType = ContractType.Temporary;
+                        job.EmploymentType = EmploymentType.Temporary;
                         break;
                     default:
                         break;
@@ -184,10 +184,10 @@ namespace JobFinder.Models
                 switch (githubJob.JobType)
                 {
                     case "Full Time":
-                        job.ContractTime = ContractTime.FullTime;
+                        job.Schedule = JobSchedule.FullTime;
                         break;
                     case "Part Time":
-                        job.ContractTime = ContractTime.PartTime;
+                        job.Schedule = JobSchedule.PartTime;
                         break;
                     default:
                         break;
@@ -248,14 +248,14 @@ namespace JobFinder.Models
                 switch (joobleJob.JobType)
                 {
                     case "Full-time":
-                        job.ContractTime = ContractTime.FullTime;
+                        job.Schedule = JobSchedule.FullTime;
                         break;
                     case "Part-time":
-                        job.ContractTime = ContractTime.PartTime;
+                        job.Schedule = JobSchedule.PartTime;
                         break;
                     case "Temporary":
                     case "Internship":
-                        job.ContractType = ContractType.Temporary;
+                        job.EmploymentType = EmploymentType.Temporary;
                         break;
                     default:
                         break;
@@ -372,10 +372,10 @@ namespace JobFinder.Models
                 switch (usajobsJob.Details.PositionSchedule[0].Code)
                 {
                     case "1":
-                        job.ContractTime = ContractTime.FullTime;
+                        job.Schedule = JobSchedule.FullTime;
                         break;
                     case "2":
-                        job.ContractTime = ContractTime.PartTime;
+                        job.Schedule = JobSchedule.PartTime;
                         break;
                     default:
                         break;
@@ -383,10 +383,10 @@ namespace JobFinder.Models
                 switch (usajobsJob.Details.OfferingType[0].Code)
                 {
                     case "15317":
-                        job.ContractType = ContractType.Permanent;
+                        job.EmploymentType = EmploymentType.Permanent;
                         break;
                     default:
-                        job.ContractType = ContractType.Temporary;
+                        job.EmploymentType = EmploymentType.Temporary;
                         break;
                 }
 

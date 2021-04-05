@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace JobFinder.Models
 {
-    public enum ContractTime { FullTime, PartTime }
-    public enum ContractType { Permanent, Temporary }
+    public enum JobSchedule { FullTime, PartTime }
+    public enum EmploymentType { Permanent, Temporary }
 
     public class Job
     {
@@ -19,17 +19,17 @@ namespace JobFinder.Models
 
         public int? MinSalary { get; set; }
         public int? MaxSalary { get; set; }
-        public ContractTime? ContractTime { get; set; }
-        public ContractType? ContractType { get; set; }
+        public JobSchedule? Schedule { get; set; }
+        public EmploymentType? EmploymentType { get; set; }
 
 
-        public string GetContractTime()
+        public string GetScheduleString()
         {
-            switch (ContractTime)
+            switch (Schedule)
             {
-                case Models.ContractTime.FullTime:
+                case JobSchedule.FullTime:
                     return "Full-time";
-                case Models.ContractTime.PartTime:
+                case JobSchedule.PartTime:
                     return "Part-time";
                 default:
                     return null;

@@ -46,11 +46,11 @@
                     </time>
                 </td>
                 <td class="jobType">
-                    @if (job.ContractTime != null)
+                    @if (job.Schedule != null)
                     {
-                        <span>@job.GetContractTime()</span> <br />
+                        <span>@job.GetScheduleString()</span> <br />
                     }
-                    @job.ContractType
+                    @job.EmploymentType
                 </td>
                 <td>@job.MinSalary</td>
                 <td>@job.MaxSalary</td>

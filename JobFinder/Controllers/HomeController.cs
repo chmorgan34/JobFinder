@@ -32,17 +32,63 @@ namespace JobFinder.Controllers
             if (ModelState.IsValid)
             {
                 var results = new List<Job>();
+                var errors = new List<string>();
 
                 if (searchVM.Adzuna)
-                    results.AddRange(await apiHelper.GetAdzunaAsync(searchVM));
+                {
+                    try
+                    {
+                        results.AddRange(await apiHelper.GetAdzunaAsync(searchVM));
+                    }
+                    catch (Exception e)
+                    {
+                        errors.Add(e.Message);
+                    }
+                }
                 if (searchVM.Github)
-                    results.AddRange(await apiHelper.GetGithubjobsAsync(searchVM));
+                {
+                    try
+                    {
+                        results.AddRange(await apiHelper.GetGithubjobsAsync(searchVM));
+                    }
+                    catch (Exception e)
+                    {
+                        errors.Add(e.Message);
+                    }
+                }
                 if (searchVM.Jooble)
-                    results.AddRange(await apiHelper.GetJoobleAsync(searchVM));
+                {
+                    try
+                    {
+                        results.AddRange(await apiHelper.GetJoobleAsync(searchVM));
+                    }
+                    catch (Exception e)
+                    {
+                        errors.Add(e.Message);
+                    }
+                }
                 if (searchVM.Reed)
-                    results.AddRange(await apiHelper.GetReedAsync(searchVM));
+                {
+                    try
+                    {
+                        results.AddRange(await apiHelper.GetReedAsync(searchVM));
+                    }
+                    catch (Exception e)
+                    {
+                        errors.Add(e.Message);
+                    }
+                }
                 if (searchVM.Usajobs)
-                    results.AddRange(await apiHelper.GetUsajobsAsync(searchVM));
+                {
+                    try
+                    {
+                        results.AddRange(await apiHelper.GetUsajobsAsync(searchVM));
+                    }
+                    catch (Exception e)
+                    {
+                        errors.Add(e.Message);
+                    }
+                }
 
                 if (searchVM.SortBy == "date")
                     results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));
@@ -50,6 +96,7 @@ namespace JobFinder.Controllers
                     results.Sort((x, y) => Nullable.Compare(y.MinSalary, x.MinSalary));
 
                 searchVM.Results = results;
+                searchVM.Errors = errors;
             }
 
             return View("Index", searchVM);
