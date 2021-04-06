@@ -23,12 +23,14 @@
                     <label asp-for="Jooble"></label>
                 </div>
                 <div>
-                    <input asp-for="Reed" type="checkbox" />
-                    <label asp-for="Reed"></label>
-                </div>
-                <div>
                     <input asp-for="Usajobs" type="checkbox" />
                     <label asp-for="Usajobs"></label>
+                    <sup>(USA only)</sup>
+                </div>
+                <div>
+                    <input asp-for="Reed" type="checkbox" />
+                    <label asp-for="Reed"></label>
+                    <sup>(UK only)</sup>
                 </div>
             </fieldset>
 
@@ -37,7 +39,8 @@
 
                 <div class="searchParam">
                     <label asp-for="Country"></label><br />
-                    <select asp-for="Country" asp-items="Model.Countries"></select>
+                    <select asp-for="Country" asp-items="Model.Countries"></select><br />
+                    <span asp-validation-for="Country" class="validationMessage"></span>
                 </div>
                 <div class="searchParam">
                     <label asp-for="Keywords"></label><br />
@@ -89,7 +92,7 @@
             if (Model.Errors.Count > 0)
             {
                 <div id="search-errors">
-                    Note:
+                    There was a problem accessing the following job boards:
                     <ul>
                         @foreach (var error in Model.Errors)
                         {
@@ -107,6 +110,7 @@
             {
                 <partial name="_JobListPartial" model="Model.Results" />
             }
+            <span></span>
         }
     </section>
 </div>

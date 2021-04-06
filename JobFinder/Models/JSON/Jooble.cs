@@ -46,7 +46,7 @@ namespace JobFinder.Models.JSON
     public class JoobleRequest
     {
         [JsonPropertyName("keywords")]
-        public string Keywords { get; set; }    // Error if null or empty
+        public string Keywords { get; set; }
 
         [JsonPropertyName("location")]
         public string Location { get; set; }

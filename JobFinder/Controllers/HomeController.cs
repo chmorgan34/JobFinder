@@ -31,6 +31,11 @@ namespace JobFinder.Controllers
         {
             if (ModelState.IsValid)
             {
+                var country = searchVM.Countries.Find(sli => sli.Value == searchVM.Country).Text;
+                if (searchVM.Location == null)
+                    searchVM.Location = country;
+                else searchVM.Location += ", " + country;
+
                 var results = new List<Job>();
                 var errors = new List<string>();
 
@@ -40,9 +45,9 @@ namespace JobFinder.Controllers
                     {
                         results.AddRange(await apiHelper.GetAdzunaAsync(searchVM));
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        errors.Add(e.Message);
+                        errors.Add("Adzuna");
                     }
                 }
                 if (searchVM.Github)
@@ -51,9 +56,9 @@ namespace JobFinder.Controllers
                     {
                         results.AddRange(await apiHelper.GetGithubjobsAsync(searchVM));
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        errors.Add(e.Message);
+                        errors.Add("GitHub Jobs");
                     }
                 }
                 if (searchVM.Jooble)
@@ -62,9 +67,9 @@ namespace JobFinder.Controllers
                     {
                         results.AddRange(await apiHelper.GetJoobleAsync(searchVM));
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        errors.Add(e.Message);
+                        errors.Add("Jooble");
                     }
                 }
                 if (searchVM.Reed)
@@ -73,9 +78,9 @@ namespace JobFinder.Controllers
                     {
                         results.AddRange(await apiHelper.GetReedAsync(searchVM));
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        errors.Add(e.Message);
+                        errors.Add("Reed");
                     }
                 }
                 if (searchVM.Usajobs)
@@ -84,9 +89,9 @@ namespace JobFinder.Controllers
                     {
                         results.AddRange(await apiHelper.GetUsajobsAsync(searchVM));
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        errors.Add(e.Message);
+                        errors.Add("USAJOBS");
                     }
                 }
 

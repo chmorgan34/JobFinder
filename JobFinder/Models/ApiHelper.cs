@@ -89,16 +89,7 @@ namespace JobFinder.Models
                 url += "&permanent=1";
 
 
-            Stream jsonStream;
-            try
-            {
-                jsonStream = await adzunaClient.GetStreamAsync(url);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Adzuna request failed", e);
-            }
-
+            var jsonStream = await adzunaClient.GetStreamAsync(url);
             var root = await JsonSerializer.DeserializeAsync<AdzunaRoot>(jsonStream);
 
             var results = new List<Job>();
@@ -156,16 +147,7 @@ namespace JobFinder.Models
                 url += "&full_time=on";
 
 
-            Stream jsonStream;
-            try
-            {
-                jsonStream = await githubClient.GetStreamAsync(url);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("GitHub request failed", e);
-            }
-
+            var jsonStream = await githubClient.GetStreamAsync(url);
             var githubJobs = await JsonSerializer.DeserializeAsync<List<GithubJob>>(jsonStream);
 
             var results = new List<Job>();
@@ -212,14 +194,7 @@ namespace JobFinder.Models
             };
 
             var response = await joobleClient.PostAsJsonAsync(url, joobleRequest, JoobleRequest.SerializerOptions);
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Jooble request failed", e);
-            }
+            response.EnsureSuccessStatusCode();
 
             var jsonStream = await response.Content.ReadAsStreamAsync();
             var root = await JsonSerializer.DeserializeAsync<JoobleRoot>(jsonStream);
@@ -227,7 +202,7 @@ namespace JobFinder.Models
             var results = new List<Job>();
             foreach (var joobleJob in root.Jobs)
             {
-                if (searchVM.FullTimeOnly && joobleJob.JobType != "Full-time")
+                if (searchVM.FullTimeOnly && joobleJob.JobType == "Part-time")
                     continue;
                 if (searchVM.PermanentOnly)
                 {
@@ -287,16 +262,7 @@ namespace JobFinder.Models
                 url += $"&minimumSalary={searchVM.MinSalary}";
 
 
-            Stream jsonStream;
-            try
-            {
-                jsonStream = await reedClient.GetStreamAsync(url);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Reed request failed", e);
-            }
-
+            var jsonStream = await reedClient.GetStreamAsync(url);
             var root = await JsonSerializer.DeserializeAsync<ReedRoot>(jsonStream);
 
             var results = new List<Job>();
@@ -342,16 +308,7 @@ namespace JobFinder.Models
                 url += "&SortField=Salary&SortDirection=Desc";
 
 
-            Stream jsonStream;
-            try
-            {
-                jsonStream = await usajobsClient.GetStreamAsync(url);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("USAJOBS request failed", e);
-            }
-
+            var jsonStream = await usajobsClient.GetStreamAsync(url);
             var root = await JsonSerializer.DeserializeAsync<USAJobsRoot>(jsonStream);
 
             var results = new List<Job>();
