@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace JobFinder.Controllers
@@ -31,77 +32,82 @@ namespace JobFinder.Controllers
         {
             if (ModelState.IsValid)
             {
-                var country = searchVM.Countries.Find(sli => sli.Value == searchVM.Country).Text;
-                if (searchVM.Location == null)
-                    searchVM.Location = country;
-                else searchVM.Location += ", " + country;
-
                 var results = new List<Job>();
-                var errors = new List<string>();
+                var failedRequests = new List<string>();
 
-                if (searchVM.Adzuna)
+                if (searchVM.AdzunaCheck)
                 {
                     try
                     {
                         results.AddRange(await apiHelper.GetAdzunaAsync(searchVM));
                     }
-                    catch
+                    catch (HttpRequestException)
                     {
-                        errors.Add("Adzuna");
+                        failedRequests.Add("Adzuna");
                     }
                 }
-                if (searchVM.Github)
+                if (searchVM.GithubCheck)
                 {
                     try
                     {
                         results.AddRange(await apiHelper.GetGithubjobsAsync(searchVM));
                     }
-                    catch
+                    catch (HttpRequestException)
                     {
-                        errors.Add("GitHub Jobs");
+                        failedRequests.Add("GitHub Jobs");
                     }
                 }
-                if (searchVM.Jooble)
+                if (searchVM.JoobleCheck)
                 {
                     try
                     {
                         results.AddRange(await apiHelper.GetJoobleAsync(searchVM));
                     }
-                    catch
+                    catch (HttpRequestException)
                     {
-                        errors.Add("Jooble");
+                        failedRequests.Add("Jooble");
                     }
                 }
-                if (searchVM.Reed)
+                if (searchVM.ReedCheck)
                 {
                     try
                     {
                         results.AddRange(await apiHelper.GetReedAsync(searchVM));
                     }
-                    catch
+                    catch (HttpRequestException)
                     {
-                        errors.Add("Reed");
+                        failedRequests.Add("Reed");
                     }
                 }
-                if (searchVM.Usajobs)
+                if (searchVM.UsajobsCheck)
                 {
                     try
                     {
                         results.AddRange(await apiHelper.GetUsajobsAsync(searchVM));
                     }
-                    catch
+                    catch (HttpRequestException)
                     {
-                        errors.Add("USAJOBS");
+                        failedRequests.Add("USAJOBS");
                     }
                 }
 
                 if (searchVM.SortBy == "date")
-                    results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));
+                {
+                    if (searchVM.SortDirection == "up")
+                        results.Sort((x, y) => x.CreatedAt.CompareTo(y.CreatedAt));
+                    else if (searchVM.SortDirection == "down")
+                        results.Sort((x, y) => y.CreatedAt.CompareTo(x.CreatedAt));
+                }
                 else if (searchVM.SortBy == "salary")
-                    results.Sort((x, y) => Nullable.Compare(y.MinSalary, x.MinSalary));
+                {
+                    if (searchVM.SortDirection == "up")
+                        results.Sort((x, y) => Nullable.Compare(x.MinSalary, y.MinSalary));
+                    else if (searchVM.SortDirection == "down")
+                        results.Sort((x, y) => Nullable.Compare(y.MinSalary, x.MinSalary));
+                }
 
                 searchVM.Results = results;
-                searchVM.Errors = errors;
+                searchVM.FailedRequests = failedRequests;
             }
 
             return View("Index", searchVM);

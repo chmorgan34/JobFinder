@@ -33,11 +33,10 @@ namespace JobFinder.Models
         private readonly string adzunaAppID;
         private readonly string adzunaAppKey;
         private readonly string joobleApiKey;
-        private readonly MediaTypeWithQualityHeaderValue jsonHeader;
 
         public ApiHelper(string adzunaAppID, string adzunaAppKey, string joobleApiKey, string reedApiKey, string usajobsApiKey, string usajobsUserAgent)
         {
-            jsonHeader = new MediaTypeWithQualityHeaderValue("application/json");
+            var jsonHeader = new MediaTypeWithQualityHeaderValue("application/json");
 
             adzunaClient = new HttpClient();
             adzunaClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
@@ -64,7 +63,7 @@ namespace JobFinder.Models
 
         public async Task<List<Job>> GetAdzunaAsync(SearchViewModel searchVM)
         {
-            string url = $"https://api.adzuna.com/v1/api/jobs/{searchVM.Country}/search/{searchVM.Page}" +
+            var url = $"https://api.adzuna.com/v1/api/jobs/{searchVM.AdzunaCountry}/search/{searchVM.Page}" +
                 $"?app_id={adzunaAppID}" +
                 $"&app_key={adzunaAppKey}" +
                 "&results_per_page=50" +
@@ -121,10 +120,10 @@ namespace JobFinder.Models
                 switch (adzunaJob.ContractType)
                 {
                     case "permanent":
-                        job.EmploymentType = EmploymentType.Permanent;
+                        job.EmploymentType = EmploymentLength.Permanent;
                         break;
                     case "contract":
-                        job.EmploymentType = EmploymentType.Temporary;
+                        job.EmploymentType = EmploymentLength.Temporary;
                         break;
                     default:
                         break;
@@ -138,7 +137,7 @@ namespace JobFinder.Models
 
         public async Task<List<Job>> GetGithubjobsAsync(SearchViewModel searchVM)
         {
-            string url = $"https://jobs.github.com/positions.json?page={searchVM.Page}";
+            var url = $"https://jobs.github.com/positions.json?page={searchVM.Page}";
             if (searchVM.Keywords != null)
                 url += $"&description={searchVM.Keywords}";
             if (searchVM.Location != null)
@@ -183,7 +182,7 @@ namespace JobFinder.Models
 
         public async Task<List<Job>> GetJoobleAsync(SearchViewModel searchVM)
         {
-            string url = $"https://jooble.org/api/{joobleApiKey}";
+            var url = $"https://jooble.org/api/{joobleApiKey}";
             var joobleRequest = new JoobleRequest
             {
                 Keywords = searchVM.Keywords,
@@ -204,11 +203,8 @@ namespace JobFinder.Models
             {
                 if (searchVM.FullTimeOnly && joobleJob.JobType == "Part-time")
                     continue;
-                if (searchVM.PermanentOnly)
-                {
-                    if (joobleJob.JobType == "Temporary" || joobleJob.JobType == "Internship")
-                        continue;
-                }
+                if (searchVM.PermanentOnly && (joobleJob.JobType == "Temporary" || joobleJob.JobType == "Internship"))
+                    continue;
 
                 var job = new Job
                 {
@@ -220,6 +216,26 @@ namespace JobFinder.Models
                     URL = joobleJob.URL
                 };
 
+                var salaryStr = joobleJob.SalaryString;
+                var isHourly = salaryStr.Contains("per hour");
+                salaryStr = salaryStr.Replace("per hour", string.Empty);
+                salaryStr = salaryStr.Replace("k", string.Empty);
+                salaryStr = salaryStr.Replace("$", string.Empty).Trim();
+
+                var salaryRange = salaryStr.Split('-', StringSplitOptions.TrimEntries);
+                switch (salaryRange.Length)
+                {
+                    case 1:
+                        job.MinSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[0])) : Convert.ToInt32(salaryRange[0]) * 1000;
+                        break;
+                    case 2:
+                        job.MinSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[0])) : Convert.ToInt32(salaryRange[0]) * 1000;
+                        job.MaxSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[1])) : Convert.ToInt32(salaryRange[1]) * 1000;
+                        break;
+                    default:
+                        break;
+                }
+
                 switch (joobleJob.JobType)
                 {
                     case "Full-time":
@@ -230,7 +246,7 @@ namespace JobFinder.Models
                         break;
                     case "Temporary":
                     case "Internship":
-                        job.EmploymentType = EmploymentType.Temporary;
+                        job.EmploymentType = EmploymentLength.Temporary;
                         break;
                     default:
                         break;
@@ -244,7 +260,7 @@ namespace JobFinder.Models
 
         public async Task<List<Job>> GetReedAsync(SearchViewModel searchVM)
         {
-            string url = $"https://www.reed.co.uk/api/1.0/search?resultsToSkip={(searchVM.Page - 1) * 100}";
+            var url = $"https://www.reed.co.uk/api/1.0/search?resultsToSkip={(searchVM.Page - 1) * 100}";
             if (searchVM.Keywords != null)
                 url += $"&keywords={searchVM.Keywords}";
             if (searchVM.Location != null)
@@ -303,9 +319,13 @@ namespace JobFinder.Models
             if (searchVM.PermanentOnly)
                 url += "&PositionOfferingTypeCode=15317";
             if (searchVM.SortBy == "date")
-                url += "&SortField=OpenDate&SortDirection=Desc";
+                url += "&SortField=OpenDate";
             else if (searchVM.SortBy == "salary")
-                url += "&SortField=Salary&SortDirection=Desc";
+                url += "&SortField=Salary";
+            if (searchVM.SortDirection == "up")
+                url += "&SortDirection=Asc";
+            else if (searchVM.SortDirection == "down")
+                url += "&SortDirection=Desc";
 
 
             var jsonStream = await usajobsClient.GetStreamAsync(url);
@@ -340,10 +360,10 @@ namespace JobFinder.Models
                 switch (usajobsJob.Details.OfferingType[0].Code)
                 {
                     case "15317":
-                        job.EmploymentType = EmploymentType.Permanent;
+                        job.EmploymentType = EmploymentLength.Permanent;
                         break;
                     default:
-                        job.EmploymentType = EmploymentType.Temporary;
+                        job.EmploymentType = EmploymentLength.Temporary;
                         break;
                 }
 

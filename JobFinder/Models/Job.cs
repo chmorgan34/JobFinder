@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace JobFinder.Models
 {
     public enum JobSchedule { FullTime, PartTime }
-    public enum EmploymentType { Permanent, Temporary }
+    public enum EmploymentLength { Permanent, Temporary }
 
     public class Job
     {
@@ -20,7 +20,7 @@ namespace JobFinder.Models
         public int? MinSalary { get; set; }
         public int? MaxSalary { get; set; }
         public JobSchedule? Schedule { get; set; }
-        public EmploymentType? EmploymentType { get; set; }
+        public EmploymentLength? EmploymentType { get; set; }
 
 
         public string GetScheduleString()

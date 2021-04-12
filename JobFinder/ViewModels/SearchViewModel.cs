@@ -12,31 +12,36 @@ namespace JobFinder.ViewModels
     {
         // -------------------- Output --------------------
         public List<Job> Results { get; set; }
-        public List<string> Errors { get; set; }
+        public List<string> FailedRequests { get; set; }
 
 
         // -------------------- Input ---------------------
 
         // Job boards
-        public bool Adzuna { get; set; } = true;
+        [Display(Name = "Adzuna")]
+        public bool AdzunaCheck { get; set; } = true;
 
         [Display(Name = "GitHub Jobs")]
-        public bool Github { get; set; } = true;
+        public bool GithubCheck { get; set; } = true;
 
-        public bool Jooble { get; set; } = true;
+        [Display(Name = "Jooble")]
+        public bool JoobleCheck { get; set; } = true;
 
         [Display(Name = "USAJOBS")]
-        public bool Usajobs { get; set; } = true;
+        public bool UsajobsCheck { get; set; } = true;
 
-        public bool Reed { get; set; } = false;
-
+        [Display(Name = "Reed")]
+        public bool ReedCheck { get; set; } = false;
 
 
         // Search parameters
         [Required]
-        [CountryValidation]
-        public string Country { get; set; } = "us";
+        [Display(Name = "Country")]
+        public string AdzunaCountry { get; set; } = "us";
+
+        [KeywordsValidation]
         public string Keywords { get; set; }
+
         public string Location { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Can't be less than 1.")]
@@ -56,11 +61,13 @@ namespace JobFinder.ViewModels
         [Display(Name = "Sort by")]
         public string SortBy { get; set; } = "relevance";
 
+        public string SortDirection { get; set; } = "down";
+
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Can't be less than 1.")]
         public int Page { get; set; } = 1;
 
-
+        // <select> items
         public List<SelectListItem> Countries { get; } = new()
         {
             new SelectListItem { Value = "us", Text = "United States" },
@@ -84,6 +91,11 @@ namespace JobFinder.ViewModels
             new SelectListItem { Value = "relevance", Text = "Relevance" },
             new SelectListItem { Value = "date", Text = "Date" },
             new SelectListItem { Value = "salary", Text = "Salary" }
+        };
+        public List<SelectListItem> SortDirections { get; } = new()
+        {
+            new SelectListItem { Value = "up", Text = "Ascending" },
+            new SelectListItem { Value = "down", Text = "Descending" }
         };
     }
 }

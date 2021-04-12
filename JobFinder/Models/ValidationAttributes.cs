@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace JobFinder.Models
 {
-    public class CountryValidation : ValidationAttribute
+    public class KeywordsValidation : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var searchVM = (SearchViewModel)validationContext.ObjectInstance;
-            var countryAbbr = (string)value;
-            var country = searchVM.Countries.Find(sli => sli.Value == countryAbbr).Text;
+            var keywords = (string)value;
 
-            if (searchVM.Usajobs && countryAbbr != "us")
-                return new ValidationResult($"USAJOBS doesn't provide jobs from {country}.");
-            else if (searchVM.Reed && countryAbbr != "uk")
-                return new ValidationResult($"Reed doesn't provide jobs from {country}.");
+            if (searchVM.JoobleCheck && (keywords == null || keywords == string.Empty))
+                return new ValidationResult("Jooble requires a keyword.");
             else
                 return ValidationResult.Success;
         }

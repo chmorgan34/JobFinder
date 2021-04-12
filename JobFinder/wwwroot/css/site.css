@@ -1,16 +1,24 @@
-﻿/* <------------------ Globals -------------------> */
+﻿/* #region
+    Globals
+*/
+.hidden {
+    display: none !important;
+}
+.red {
+    color: red;
+}
 .validationMessage {
+    margin-top: 0.25rem;
     color: red;
     font-size: 0.85rem;
 }
-
 .loadingSpinner {
-    border: 0.5rem solid #f3f3f3;
-    border-top: 0.5rem solid #3498db;
+    border: 0.25rem solid #f3f3f3;
+    border-top: 0.25rem solid #3498db;
     border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
-    animation: spin 1s linear infinite;
+    width: 5rem;
+    height: 5rem;
+    animation: spin 0.5s linear infinite;
 }
 @keyframes spin {
     0% {
@@ -21,31 +29,32 @@
         transform: rotate(360deg);
     }
 }
-/* ------------------------------------------------ */
+/* #endregion */
 
-
-/* <------------------ _Layout -------------------> */
+/* #region
+    _Layout
+*/
 header {
     border-bottom: 1px solid black;
 }
-#main-nav {
-    display: flex;
-    justify-content: space-between;
-}
-#main-nav ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-#main-nav li {
-    display: inline-block;
-}
-#main-nav a {
-    font-size: 1.5rem;
-}
-#main-nav span {
-    font-size: 2rem;
-    font-weight: bold;
-}
+    header > nav#main {
+        display: flex;
+        justify-content: space-between;
+    }
+        header > nav#main > ul {
+            font-size: 1.5rem;
+            list-style-type: none;
+            padding-left: 0;
+            margin-block: 0;
+        }
+            header > nav#main > ul > li {
+                display: inline-block;
+            }
+
+        header > nav#main > span {
+            font-size: 2rem;
+            font-weight: bold;
+        }
 
 main {
     margin-bottom: 1rem;
@@ -53,80 +62,135 @@ main {
 footer {
     border-top: 1px solid black;
 }
-/* ------------------------------------------------ */
+/* #endregion */
 
-
-/* <-------------- _JobListPartial ---------------> */
-#results-table {
+/* #region
+    _JobListPartial
+*/
+table#job-results {
     width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-#results-table, #results-table th, #results-table td {
     border: 1px solid darkgray;
     border-collapse: collapse;
-    padding: 0.35rem;
 }
-#results-table #desc-col {
-    width: 40%;
-}
-#results-table .jobType, .createdAt {
-    white-space: nowrap;
-}
-#results-table details summary {
-    cursor: pointer;
-}
-/* ------------------------------------------------ */
+    table#job-results > colgroup {}
+        table#job-results > colgroup > col#description {
+            width: 40%;
+        }
+
+    table#job-results > thead {}
+        table#job-results > thead th {
+            border: 1px solid darkgray;
+            border-collapse: collapse;
+            padding: 0.35rem;
+        }
+
+    table#job-results > tbody {}
+        table#job-results > tbody td {
+            border: 1px solid darkgray;
+            border-collapse: collapse;
+            padding: 0.35rem;
+        }
+            table#job-results > tbody td.jobType, td.createdAt {
+                white-space: nowrap;
+            }
+            table#job-results > tbody td > details > summary {
+                cursor: pointer;
+            }
+/* #endregion */
+
+/* #region
+    Home Index (search page)
+*/
+    #search-container {
+        display: flex;
+    }
+        /* #region
+            Input section
+        */
+        #search-container > section#input {
+            min-width: max-content;
+            padding-right: 0.75rem;
+            border-right: 1px solid black;
+            margin-right: 0.75rem;
+        }
+            /* Form */
+            #search-container > section#input > form {}
+
+                /* #region
+                    Fieldsets
+                */
+                #search-container > section#input > form > fieldset {
+                    margin-bottom: 0.5rem;
+                }
+                    /* Job boards */
+                    #search-container > section#input > form > fieldset#job-boards {}
+                        #search-container > section#input > form > fieldset#job-boards sup {
+                            font-size: 0.7em;
+                            font-style: italic;
+                        }
+
+                    /* #region
+                        Search params
+                    */
+                    #search-container > section#input > form > fieldset#search-params {}
+                        #search-container > section#input > form > fieldset#search-params > .searchParam {
+                            margin-bottom: 0.75rem;
+                        }
+                            #search-container > section#input > form > fieldset#search-params > .searchParam > * {
+                                display: block;
+                            }
+                            #search-container > section#input > form > fieldset#search-params > .searchParam > input#MilesAway {
+                                width: 3rem;
+                            }
+                            #search-container > section#input > form > fieldset#search-params > .searchParam > input#MinSalary {
+                                width: 5rem;
+                            }
+
+                        /* Page num */
+                        #search-container > section#input > form > fieldset#search-params > div#page-num {
+                            text-align: center;
+                            padding-bottom: 0.75rem;
+                            border-bottom: 1px solid black;
+                            margin-bottom: 0.75rem;
+                        }
+                            #search-container > section#input > form > fieldset#search-params > div#page-num input#Page {
+                                width: 3rem;
+                            }
+
+                        /* Requirements */
+                        #search-container > section#input > form > fieldset#search-params #requirements {
+                            font-size: 0.8rem;
+                            margin-bottom: 0.5rem;
+                        }
+                            #search-container > section#input > form > fieldset#search-params #requirements > ul {
+                                margin-block: 0;
+                                padding-inline-start: 1rem;
+                            }
+
+                        /* Notes */
+                        #search-container > section#input > form > fieldset#search-params #notes {
+                            font-size: 0.8rem;
+                        }
+                    /* #endregion */
+
+                /* #endregion */
+
+                #search-container > section#input > form > div#submit {
+                    text-align: center;
+                }
+
+        /* #endregion */
 
 
-/* <------------------- Search -------------------> */
-#search-container {
-    display: flex;
-}
-
-#input-section {
-    min-width: max-content;
-    padding-right: 0.75rem;
-    border-right: 1px solid black;
-    margin-right: 0.75rem;
-}
-#input-section form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#input-section fieldset {
-    margin-bottom: 0.5rem;
-}
-#input-section sup {
-    font-style: italic;
-}
-.searchParam {
-    margin-bottom: 0.75rem;
-}
-#sort-options {
-    border-top: 1px solid black;
-    padding-top: 0.75rem;
-    margin-bottom: 0.25rem;
-}
-input#Page, input#MilesAway {
-    width: 3rem;
-}
-input#MinSalary {
-    width: 5rem;
-}
-
-#output-section {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-#search-errors {
-    align-self: flex-start;
-}
-#search-errors ul {
-    margin-block: 0;
-}
-/* ------------------------------------------------ */
+        /* Output section */
+        #search-container section#output {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+            #search-container section#output span#no-results {
+                margin-bottom: 1rem;
+            }
+/* #endregion */

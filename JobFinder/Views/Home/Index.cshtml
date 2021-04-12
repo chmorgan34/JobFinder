@@ -1,116 +1,175 @@
 ﻿@model SearchViewModel
 @{
     ViewData["Title"] = "Search";
+
+    var adzunaHidden = Model.AdzunaCheck ? string.Empty : "hidden";
+    var githubHidden = Model.GithubCheck ? string.Empty : "hidden";
+    var joobleHidden = Model.JoobleCheck ? string.Empty : "hidden";
 }
 
 
 <div id="search-container">
-    <section id="input-section">
+    <section id="input">
         <form asp-action="Search" method="get">
-            <fieldset>
+            <fieldset id="job-boards">
                 <legend>Select job boards to include</legend>
 
                 <div>
-                    <input asp-for="Adzuna" type="checkbox" />
-                    <label asp-for="Adzuna"></label>
+                    <input asp-for="AdzunaCheck" type="checkbox" />
+                    <label asp-for="AdzunaCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="Github" type="checkbox" />
-                    <label asp-for="Github"></label>
+                    <input asp-for="GithubCheck" type="checkbox" />
+                    <label asp-for="GithubCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="Jooble" type="checkbox" />
-                    <label asp-for="Jooble"></label>
+                    <input asp-for="JoobleCheck" type="checkbox" />
+                    <label asp-for="JoobleCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="Usajobs" type="checkbox" />
-                    <label asp-for="Usajobs"></label>
-                    <sup>(USA only)</sup>
+                    <input asp-for="UsajobsCheck" type="checkbox" />
+                    <label asp-for="UsajobsCheck"></label>
+                    <sup>USA only</sup>
                 </div>
                 <div>
-                    <input asp-for="Reed" type="checkbox" />
-                    <label asp-for="Reed"></label>
-                    <sup>(UK only)</sup>
+                    <input asp-for="ReedCheck" type="checkbox" />
+                    <label asp-for="ReedCheck"></label>
+                    <sup>UK only</sup>
                 </div>
             </fieldset>
 
-            <fieldset>
+            <fieldset id="search-params">
                 <legend>Enter search parameters</legend>
 
-                <div class="searchParam">
-                    <label asp-for="Country"></label><br />
-                    <select asp-for="Country" asp-items="Model.Countries"></select><br />
-                    <span asp-validation-for="Country" class="validationMessage"></span>
+                <div class="searchParam adzunaReq @adzunaHidden">
+                    <span>
+                        <span class="red">*</span>
+                        <label asp-for="AdzunaCountry"></label>
+                    </span>
+                    <select asp-for="AdzunaCountry" asp-items="Model.Countries"></select>
+                    <span asp-validation-for="AdzunaCountry" class="validationMessage"></span>
                 </div>
+
                 <div class="searchParam">
-                    <label asp-for="Keywords"></label><br />
+                    <span>
+                        <span class="red joobleReq @joobleHidden">*</span>
+                        <label asp-for="Keywords"></label>
+                    </span>
                     <input asp-for="Keywords" type="text" placeholder=".NET developer" />
+                    <span asp-validation-for="Keywords" class="validationMessage"></span>
                 </div>
+
                 <div class="searchParam">
-                    <label asp-for="Location"></label><br />
+                    <label asp-for="Location"></label>
                     <input asp-for="Location" type="text" placeholder="Tempe, AZ" />
                 </div>
+
                 <div class="searchParam">
-                    <label asp-for="MilesAway"></label><br />
-                    <input asp-for="MilesAway" type="number" placeholder="5" /><br />
+                    <span>
+                        <label asp-for="MilesAway"></label>
+                        <sup class="githubNote @githubHidden">&dagger;</sup>
+                    </span>
+                    <input asp-for="MilesAway" type="number" placeholder="5" />
                     <span asp-validation-for="MilesAway" class="validationMessage"></span>
                 </div>
+
                 <div class="searchParam">
-                    <label asp-for="MinSalary"></label><br />
-                    <input asp-for="MinSalary" type="number" placeholder="75000" /><br />
+                    <span>
+                        <label asp-for="MinSalary"></label>
+                        <sup class="githubNote @githubHidden">&dagger;</sup>
+                    </span>
+                    <input asp-for="MinSalary" type="number" placeholder="75000" />
                     <span asp-validation-for="MinSalary" class="validationMessage"></span>
                 </div>
+
                 <div class="searchParam">
-                    <input asp-for="FullTimeOnly" type="checkbox" />
-                    <label asp-for="FullTimeOnly"></label>
-                    <br />
-                    <input asp-for="PermanentOnly" type="checkbox" />
-                    <label asp-for="PermanentOnly"></label>
+                    <div>
+                        <input asp-for="FullTimeOnly" type="checkbox" />
+                        <label asp-for="FullTimeOnly"></label>
+                    </div>
+                    <div>
+                        <input asp-for="PermanentOnly" type="checkbox" />
+                        <span>
+                            <label asp-for="PermanentOnly"></label>
+                            <sup class="githubNote @githubHidden">&dagger;</sup>
+                        </span>
+                    </div>
                 </div>
-                <div id="sort-options">
+
+                <div class="searchParam">
                     <label asp-for="SortBy"></label>
-                    <select asp-for="SortBy" asp-items="Model.SortTypes"></select>
+                    <div>
+                        <select asp-for="SortBy" asp-items="Model.SortTypes"></select>
+                        <select asp-for="SortDirection" asp-items="Model.SortDirections"></select>
+                    </div>
                 </div>
-                <div>
-                    <label asp-for="Page"></label>
-                    <input asp-for="Page" type="number" placeholder="1" /><br />
+
+                <div id="page-num">
+                    <div>
+                        <span>
+                            <span class="red">*</span>
+                            <label asp-for="Page"></label>
+                        </span>
+                        <input asp-for="Page" type="number" placeholder="1" />
+                    </div>
                     <span asp-validation-for="Page" class="validationMessage"></span>
+                </div>
+
+                <div>
+                    <div id="requirements">
+                        <span>
+                            <span class="red">*</span>
+                            <span>Required</span>
+                        </span>
+                        <ul>
+                            <li class="adzunaReq @adzunaHidden">Adzuna requires a country</li>
+                            <li class="joobleReq @joobleHidden">Jooble requires at least one keyword</li>
+                        </ul>
+                    </div>
+
+                    <div id="notes">
+                        <span class="githubNote @githubHidden">
+                            <sup>&dagger;</sup>
+                            <span>Not supported by GitHub Jobs</span>
+                        </span>
+                    </div>
                 </div>
             </fieldset>
 
-            <input type="submit" value="Search" />
+            <div id="submit">
+                <input type="submit" value="Search" />
+            </div>
         </form>
     </section>
 
-    <section id="output-section">
+    <section id="output">
         @if (Model.Results == null)
         {
             <span>Click "Search" to get started!</span>
         }
         else
         {
-            if (Model.Errors.Count > 0)
-            {
-                <div id="search-errors">
-                    There was a problem accessing the following job boards:
-                    <ul>
-                        @foreach (var error in Model.Errors)
-                        {
-                            <li>@error</li>
-                        }
-                    </ul>
-                </div>
-            }
-
             if (Model.Results.Count == 0)
             {
-                <span>No jobs found :(</span>
+                <span id="no-results">No jobs found :(</span>
             }
-            else
+            if (Model.FailedRequests.Count > 0)
+            {
+                <div>
+                    There was a problem accessing the following job boards:
+                    <ul>
+                        @foreach (var jobBoard in Model.FailedRequests)
+                        {
+                            <li>@jobBoard</li>
+                        }
+                    </ul>
+                    <button id="try-again">Try again?</button>
+                </div>
+            }
+            if (Model.Results.Count > 0)
             {
                 <partial name="_JobListPartial" model="Model.Results" />
             }
-            <span></span>
         }
     </section>
 </div>
@@ -118,11 +177,55 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <!-- Show loading spinner on form submit -->
     <script>
-        const form = $('#input-section form');
-        form.submit(function (event) {
-            if (form.valid()) {
-                $('#output-section').html('<div class="loadingSpinner"></div>');
+        const outputSection = $('section#output');
+        function showLoadingSpinner() {
+            outputSection.html('<div class="loadingSpinner"></div>');
+        }
+
+        $('section#input form').submit(function () {
+            if ($(this).valid()) {
+                showLoadingSpinner();
+            }
+        });
+
+        // Try again?: re-submit the previous search
+        $('button#try-again').click(function () {
+            showLoadingSpinner();
+            location.reload();
+        });
+    </script>
+
+    <!-- Show/hide form requirements on job board check -->
+    <script>
+        const adzunaReqs = $('.adzunaReq');
+        const joobleReqs = $('.joobleReq');
+        const githubNotes = $('.githubNote');
+
+        $('input#AdzunaCheck').change(function () {
+            if (this.checked) {
+                adzunaReqs.removeClass('hidden');
+            }
+            else {
+                adzunaReqs.addClass('hidden');
+            }
+        });
+        $('input#JoobleCheck').change(function () {
+            if (this.checked) {
+                joobleReqs.removeClass('hidden');
+            }
+            else {
+                joobleReqs.addClass('hidden');
+            }
+        });
+        $('input#GithubCheck').change(function () {
+            if (this.checked) {
+                githubNotes.removeClass('hidden');
+            }
+            else {
+                githubNotes.addClass('hidden');
             }
         });
     </script>
