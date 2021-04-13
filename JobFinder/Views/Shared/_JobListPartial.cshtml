@@ -28,12 +28,12 @@
         @foreach (var job in Model)
         {
             <tr>
-                <td>@job.Title</td>
+                <td>@Html.Raw(job.Title)</td>
                 <td>
                     <details>
                         <summary>Click to expand</summary>
                         <hr />
-                        <p>@job.Description</p>
+                        <p>@Html.Raw(job.Description)</p>
                     </details>
                 </td>
                 <td class="createdAt">

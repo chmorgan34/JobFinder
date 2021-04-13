@@ -160,8 +160,8 @@ namespace JobFinder.Models
             {
                 var job = new Job
                 {
-                    Title = Regex.Replace(adzunaJob.TitleHTML, "<.*?>", string.Empty),
-                    Description = Regex.Replace(adzunaJob.DescriptionHTML, "<.*?>", string.Empty),
+                    Title = adzunaJob.TitleHTML,
+                    Description = adzunaJob.DescriptionHTML,
                     CreatedAt = adzunaJob.CreatedAt,
                     Company = adzunaJob.Company.Name,
                     Location = adzunaJob.Location.LocationString,
@@ -221,7 +221,7 @@ namespace JobFinder.Models
                 var job = new Job
                 {
                     Title = githubJob.Title,
-                    Description = Regex.Replace(githubJob.DescriptionHTML, "<.*?>", string.Empty),
+                    Description = githubJob.DescriptionHTML,
                     CreatedAt = githubJob.GetDateTime(),
                     Company = githubJob.Company,
                     Location = githubJob.Location,
@@ -280,7 +280,7 @@ namespace JobFinder.Models
                 var job = new Job
                 {
                     Title = joobleJob.Title,
-                    Description = Regex.Replace(joobleJob.DescriptionHTML, "<.*?>", string.Empty).Replace("&nbsp;", string.Empty),
+                    Description = joobleJob.DescriptionHTML,
                     CreatedAt = joobleJob.CreatedAt,
                     Company = joobleJob.Company,
                     Location = joobleJob.Location,
