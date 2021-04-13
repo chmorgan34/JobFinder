@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace JobFinder.Models
 
         public int? MinSalary { get; set; }
         public int? MaxSalary { get; set; }
+        public CultureInfo SalaryCulture { get; set; }
         public JobSchedule? Schedule { get; set; }
         public EmploymentLength? EmploymentType { get; set; }
 

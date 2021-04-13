@@ -27,6 +27,9 @@ namespace JobFinder.ViewModels
         [Display(Name = "Jooble")]
         public bool JoobleCheck { get; set; } = true;
 
+        [Display(Name = "The Muse")]
+        public bool ThemuseCheck { get; set; } = true;
+
         [Display(Name = "USAJOBS")]
         public bool UsajobsCheck { get; set; } = true;
 
@@ -38,6 +41,9 @@ namespace JobFinder.ViewModels
         [Required]
         [Display(Name = "Country")]
         public string AdzunaCountry { get; set; } = "us";
+
+        [Display(Name = "Category")]
+        public string ThemuseCategory { get; set; } = "Software Engineer";
 
         [KeywordsValidation]
         public string Keywords { get; set; }
@@ -85,6 +91,36 @@ namespace JobFinder.ViewModels
             new SelectListItem { Value = "sg", Text = "Singapore" },
             new SelectListItem { Value = "za", Text = "South Africa" },
             new SelectListItem { Value = "gb", Text = "United Kingdom" }
+        };
+        public List<SelectListItem> ThemuseCategories { get; } = new()
+        {
+            new SelectListItem { Value = "Accounting", Text = "Accounting" },
+            new SelectListItem { Value = "Corporate", Text = "Corporate" },
+            new SelectListItem { Value = "Data Science", Text = "Data Science" },
+            new SelectListItem { Value = "Editor", Text = "Editor" },
+            new SelectListItem { Value = "HR", Text = "HR" },
+            new SelectListItem { Value = "Law", Text = "Law" },
+            new SelectListItem { Value = "Mechanic", Text = "Mechanic" },
+            new SelectListItem { Value = "Nurses", Text = "Nurses" },
+            new SelectListItem { Value = "Physical Assistant", Text = "Physical Assistant" },
+            new SelectListItem { Value = "Project Management", Text = "Project Management" },
+            new SelectListItem { Value = "Recruiting", Text = "Recruiting" },
+            new SelectListItem { Value = "Sales", Text = "Sales" },
+            new SelectListItem { Value = "UX", Text = "UX" },
+            new SelectListItem { Value = "Writer", Text = "Writer" },
+            new SelectListItem { Value = "Account Management/Customer Success", Text = "Account Management/Customer Success" },
+            new SelectListItem { Value = "Customer Service Career", Text = "Customer Service Career" },
+            new SelectListItem { Value = "Design", Text = "Design" },
+            new SelectListItem { Value = "Education", Text = "Education" },
+            new SelectListItem { Value = "IT", Text = "IT" },
+            new SelectListItem { Value = "Marketing", Text = "Marketing" },
+            new SelectListItem { Value = "Mental Health", Text = "Mental Health" },
+            new SelectListItem { Value = "Office Administration", Text = "Office Administration" },
+            new SelectListItem { Value = "Product", Text = "Product" },
+            new SelectListItem { Value = "Public Relations", Text = "Public Relations" },
+            new SelectListItem { Value = "Retail", Text = "Retail" },
+            new SelectListItem { Value = "Software Engineer", Text = "Software Engineer" },
+            new SelectListItem { Value = "Videography", Text = "Videography" }
         };
         public List<SelectListItem> SortTypes { get; } = new()
         {

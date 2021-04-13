@@ -29,6 +29,9 @@ namespace JobFinder.Models.JSON
         [JsonPropertyName("maximumSalary")]
         public double? MaxSalary { get; set; }
 
+        [JsonPropertyName("currency")]
+        public string Currency { get; set; }
+
         [JsonPropertyName("date")]
         public string CreatedAt { get; set; }
 

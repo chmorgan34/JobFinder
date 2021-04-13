@@ -38,7 +38,8 @@
                 </td>
                 <td class="createdAt">
                     <time datetime="@job.CreatedAt">
-                        @job.CreatedAt.ToShortDateString() <br />
+                        <span>@job.CreatedAt.ToShortDateString()</span>
+                        <br />
                         @if (job.CreatedAt.TimeOfDay != TimeSpan.Zero)
                         {
                             <span>@job.CreatedAt.ToShortTimeString()</span>
@@ -48,12 +49,23 @@
                 <td class="jobType">
                     @if (job.Schedule != null)
                     {
-                        <span>@job.GetScheduleString()</span> <br />
+                        <span>@job.GetScheduleString()</span>
+                        <br />
                     }
-                    @job.EmploymentType
+                    <span>@job.EmploymentType</span>
                 </td>
-                <td>@job.MinSalary</td>
-                <td>@job.MaxSalary</td>
+                <td class="salary">
+                    @if (job.MinSalary != null)
+                    {
+                        <span>@string.Format(job.SalaryCulture.NumberFormat, "{0:C}", job.MinSalary)</span>
+                    }
+                </td>
+                <td class="salary">
+                    @if (job.MaxSalary != null)
+                    {
+                        <span>@string.Format(job.SalaryCulture.NumberFormat, "{0:C}", job.MaxSalary)</span>
+                    }
+                </td>
                 <td>@job.Location</td>
                 <td>@job.Company</td>
                 <td><a href="@job.URL">Link</a></td>

@@ -33,6 +33,7 @@ namespace JobFinder
                 adzunaAppKey: Configuration["AdzunaAppKey"],
                 joobleApiKey: Configuration["JoobleApiKey"],
                 reedApiKey: Configuration["ReedApiKey"],
+                themuseApiKey: Configuration["TheMuseApiKey"],
                 usajobsApiKey: Configuration["UsajobsApiKey"],
                 usajobsUserAgent: Configuration["UsajobsUserAgent"]));
 

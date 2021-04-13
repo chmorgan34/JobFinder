@@ -5,6 +5,7 @@
     var adzunaHidden = Model.AdzunaCheck ? string.Empty : "hidden";
     var githubHidden = Model.GithubCheck ? string.Empty : "hidden";
     var joobleHidden = Model.JoobleCheck ? string.Empty : "hidden";
+    var themuseHidden = Model.ThemuseCheck ? string.Empty : "hidden";
 }
 
 
@@ -27,6 +28,10 @@
                     <label asp-for="JoobleCheck"></label>
                 </div>
                 <div>
+                    <input asp-for="ThemuseCheck" type="checkbox" />
+                    <label asp-for="ThemuseCheck"></label>
+                </div>
+                <div>
                     <input asp-for="UsajobsCheck" type="checkbox" />
                     <label asp-for="UsajobsCheck"></label>
                     <sup>USA only</sup>
@@ -45,15 +50,26 @@
                     <span>
                         <span class="red">*</span>
                         <label asp-for="AdzunaCountry"></label>
+                        <sup>(for Adzuna)</sup>
                     </span>
                     <select asp-for="AdzunaCountry" asp-items="Model.Countries"></select>
                     <span asp-validation-for="AdzunaCountry" class="validationMessage"></span>
+                </div>
+
+                <div class="searchParam themuseReq @themuseHidden">
+                    <span>
+                        <span class="red">*</span>
+                        <label asp-for="ThemuseCategory"></label>
+                        <sup>(for The Muse)</sup>
+                    </span>
+                    <select asp-for="ThemuseCategory" asp-items="Model.ThemuseCategories"></select>
                 </div>
 
                 <div class="searchParam">
                     <span>
                         <span class="red joobleReq @joobleHidden">*</span>
                         <label asp-for="Keywords"></label>
+                        <sup class="themuseNote @themuseHidden">M</sup>
                     </span>
                     <input asp-for="Keywords" type="text" placeholder=".NET developer" />
                     <span asp-validation-for="Keywords" class="validationMessage"></span>
@@ -67,7 +83,8 @@
                 <div class="searchParam">
                     <span>
                         <label asp-for="MilesAway"></label>
-                        <sup class="githubNote @githubHidden">&dagger;</sup>
+                        <sup class="githubNote @githubHidden">G</sup>
+                        <sup class="themuseNote @themuseHidden">M</sup>
                     </span>
                     <input asp-for="MilesAway" type="number" placeholder="5" />
                     <span asp-validation-for="MilesAway" class="validationMessage"></span>
@@ -76,7 +93,8 @@
                 <div class="searchParam">
                     <span>
                         <label asp-for="MinSalary"></label>
-                        <sup class="githubNote @githubHidden">&dagger;</sup>
+                        <sup class="githubNote @githubHidden">G</sup>
+                        <sup class="themuseNote @themuseHidden">M</sup>
                     </span>
                     <input asp-for="MinSalary" type="number" placeholder="75000" />
                     <span asp-validation-for="MinSalary" class="validationMessage"></span>
@@ -85,13 +103,17 @@
                 <div class="searchParam">
                     <div>
                         <input asp-for="FullTimeOnly" type="checkbox" />
-                        <label asp-for="FullTimeOnly"></label>
+                        <span>
+                            <label asp-for="FullTimeOnly"></label>
+                            <sup class="themuseNote @themuseHidden">M</sup>
+                        </span>
                     </div>
                     <div>
                         <input asp-for="PermanentOnly" type="checkbox" />
                         <span>
                             <label asp-for="PermanentOnly"></label>
-                            <sup class="githubNote @githubHidden">&dagger;</sup>
+                            <sup class="githubNote @githubHidden">G</sup>
+                            <sup class="themuseNote @themuseHidden">M</sup>
                         </span>
                     </div>
                 </div>
@@ -123,15 +145,20 @@
                         </span>
                         <ul>
                             <li class="adzunaReq @adzunaHidden">Adzuna requires a country</li>
+                            <li class="themuseReq @themuseHidden">The Muse requires a category</li>
                             <li class="joobleReq @joobleHidden">Jooble requires at least one keyword</li>
                         </ul>
                     </div>
 
                     <div id="notes">
-                        <span class="githubNote @githubHidden">
-                            <sup>&dagger;</sup>
+                        <div class="githubNote @githubHidden">
+                            <sup>G</sup>
                             <span>Not supported by GitHub Jobs</span>
-                        </span>
+                        </div>
+                        <div class="themuseNote @themuseHidden">
+                            <sup>M</sup>
+                            <span>Not supported by The Muse</span>
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -202,7 +229,9 @@
     <script>
         const adzunaReqs = $('.adzunaReq');
         const joobleReqs = $('.joobleReq');
+        const themuseReqs = $('.themuseReq');
         const githubNotes = $('.githubNote');
+        const themuseNotes = $('.themuseNote');
 
         $('input#AdzunaCheck').change(function () {
             if (this.checked) {
@@ -226,6 +255,16 @@
             }
             else {
                 githubNotes.addClass('hidden');
+            }
+        });
+        $('input#ThemuseCheck').change(function () {
+            if (this.checked) {
+                themuseReqs.removeClass('hidden');
+                themuseNotes.removeClass('hidden');
+            }
+            else {
+                themuseReqs.addClass('hidden');
+                themuseNotes.addClass('hidden');
             }
         });
     </script>

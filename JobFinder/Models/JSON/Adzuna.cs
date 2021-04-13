@@ -36,10 +36,10 @@ namespace JobFinder.Models.JSON
         public string URL { get; set; }
 
         [JsonPropertyName("salary_max")]
-        public int? MinSalary { get; set; }
+        public int? MaxSalary { get; set; }
 
         [JsonPropertyName("salary_min")]
-        public int? MaxSalary { get; set; }
+        public int? MinSalary { get; set; }
 
         [JsonPropertyName("title")]
         public string TitleHTML { get; set; }

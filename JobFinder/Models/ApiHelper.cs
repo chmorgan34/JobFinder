@@ -3,6 +3,7 @@ using JobFinder.Models.JSON;
 using JobFinder.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -20,6 +21,7 @@ namespace JobFinder.Models
         Task<List<Job>> GetGithubjobsAsync(SearchViewModel searchVM);
         Task<List<Job>> GetJoobleAsync(SearchViewModel searchVM);
         Task<List<Job>> GetReedAsync(SearchViewModel searchVM);
+        Task<List<Job>> GetThemuseAsync(SearchViewModel searchVM);
         Task<List<Job>> GetUsajobsAsync(SearchViewModel searchVM);
     }
 
@@ -29,12 +31,15 @@ namespace JobFinder.Models
         private readonly HttpClient githubClient;
         private readonly HttpClient joobleClient;
         private readonly HttpClient reedClient;
+        private readonly HttpClient themuseClient;
         private readonly HttpClient usajobsClient;
         private readonly string adzunaAppID;
         private readonly string adzunaAppKey;
         private readonly string joobleApiKey;
+        private readonly string themuseApiKey;
 
-        public ApiHelper(string adzunaAppID, string adzunaAppKey, string joobleApiKey, string reedApiKey, string usajobsApiKey, string usajobsUserAgent)
+        public ApiHelper(string adzunaAppID, string adzunaAppKey, string joobleApiKey, string reedApiKey, string themuseApiKey,
+            string usajobsApiKey, string usajobsUserAgent)
         {
             var jsonHeader = new MediaTypeWithQualityHeaderValue("application/json");
 
@@ -55,12 +60,17 @@ namespace JobFinder.Models
             var base64AuthString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{reedApiKey}:"));
             reedClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64AuthString);
 
+            themuseClient = new HttpClient();
+            themuseClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
+            this.themuseApiKey = themuseApiKey;
+
             usajobsClient = new HttpClient();
             usajobsClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
             usajobsClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", usajobsUserAgent);
             usajobsClient.DefaultRequestHeaders.Add("Authorization-Key", usajobsApiKey);
         }
 
+        // https://developer.adzuna.com/activedocs#!/adzuna/search
         public async Task<List<Job>> GetAdzunaAsync(SearchViewModel searchVM)
         {
             var url = $"https://api.adzuna.com/v1/api/jobs/{searchVM.AdzunaCountry}/search/{searchVM.Page}" +
@@ -91,6 +101,60 @@ namespace JobFinder.Models
             var jsonStream = await adzunaClient.GetStreamAsync(url);
             var root = await JsonSerializer.DeserializeAsync<AdzunaRoot>(jsonStream);
 
+            string cultureName;
+            switch (searchVM.AdzunaCountry)
+            {
+                case "us":
+                    cultureName = "en-US";
+                    break;
+                case "at":
+                    cultureName = "en-AT";
+                    break;
+                case "br":
+                    cultureName = "pt-BR";
+                    break;
+                case "ca":
+                    cultureName = "en-CA";
+                    break;
+                case "de":
+                    cultureName = "en-DE";
+                    break;
+                case "fr":
+                    cultureName = "fr-FR";
+                    break;
+                case "in":
+                    cultureName = "en-IN";
+                    break;
+                case "it":
+                    cultureName = "it-IT";
+                    break;
+                case "nl":
+                    cultureName = "en-NL";
+                    break;
+                case "nz":
+                    cultureName = "en-NZ";
+                    break;
+                case "pl":
+                    cultureName = "pl-PL";
+                    break;
+                case "ru":
+                    cultureName = "ru-RU";
+                    break;
+                case "sg":
+                    cultureName = "en-SG";
+                    break;
+                case "za":
+                    cultureName = "en-ZA";
+                    break;
+                case "uk":
+                    cultureName = "en-GB";
+                    break;
+                default:
+                    throw new Exception("Adzuna country does not exist.");
+            }
+            var salaryCulture = new CultureInfo(cultureName, false);
+            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
+
             var results = new List<Job>();
             foreach (var adzunaJob in root.Jobs)
             {
@@ -102,8 +166,9 @@ namespace JobFinder.Models
                     Company = adzunaJob.Company.Name,
                     Location = adzunaJob.Location.LocationString,
                     URL = adzunaJob.URL,
-                    MinSalary = adzunaJob.MaxSalary,
-                    MaxSalary = adzunaJob.MinSalary
+                    MinSalary = adzunaJob.MinSalary,
+                    MaxSalary = adzunaJob.MaxSalary,
+                    SalaryCulture = salaryCulture
                 };
 
                 switch (adzunaJob.ContractTime)
@@ -135,6 +200,7 @@ namespace JobFinder.Models
             return results;
         }
 
+        // https://jobs.github.com/api
         public async Task<List<Job>> GetGithubjobsAsync(SearchViewModel searchVM)
         {
             var url = $"https://jobs.github.com/positions.json?page={searchVM.Page}";
@@ -180,6 +246,7 @@ namespace JobFinder.Models
             return results;
         }
 
+        // https://jooble.org/api/about
         public async Task<List<Job>> GetJoobleAsync(SearchViewModel searchVM)
         {
             var url = $"https://jooble.org/api/{joobleApiKey}";
@@ -198,6 +265,10 @@ namespace JobFinder.Models
             var jsonStream = await response.Content.ReadAsStreamAsync();
             var root = await JsonSerializer.DeserializeAsync<JoobleRoot>(jsonStream);
 
+
+            var salaryCulture = new CultureInfo("en-US", false);
+            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
+
             var results = new List<Job>();
             foreach (var joobleJob in root.Jobs)
             {
@@ -213,8 +284,10 @@ namespace JobFinder.Models
                     CreatedAt = joobleJob.CreatedAt,
                     Company = joobleJob.Company,
                     Location = joobleJob.Location,
-                    URL = joobleJob.URL
+                    URL = joobleJob.URL,
+                    SalaryCulture = salaryCulture
                 };
+
 
                 var salaryStr = joobleJob.SalaryString;
                 var isHourly = salaryStr.Contains("per hour");
@@ -226,15 +299,19 @@ namespace JobFinder.Models
                 switch (salaryRange.Length)
                 {
                     case 1:
-                        job.MinSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[0])) : Convert.ToInt32(salaryRange[0]) * 1000;
+                        if (salaryRange[0] != string.Empty)
+                            job.MinSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[0])) : Convert.ToInt32(salaryRange[0]) * 1000;
                         break;
                     case 2:
-                        job.MinSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[0])) : Convert.ToInt32(salaryRange[0]) * 1000;
-                        job.MaxSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[1])) : Convert.ToInt32(salaryRange[1]) * 1000;
+                        if (salaryRange[0] != string.Empty)
+                            job.MinSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[0])) : Convert.ToInt32(salaryRange[0]) * 1000;
+                        if (salaryRange[1] != string.Empty)
+                            job.MaxSalary = isHourly ? Convert.ToInt32(Convert.ToDouble(salaryRange[1])) : Convert.ToInt32(salaryRange[1]) * 1000;
                         break;
                     default:
                         break;
                 }
+
 
                 switch (joobleJob.JobType)
                 {
@@ -258,6 +335,7 @@ namespace JobFinder.Models
             return results;
         }
 
+        // https://www.reed.co.uk/developers/jobseeker
         public async Task<List<Job>> GetReedAsync(SearchViewModel searchVM)
         {
             var url = $"https://www.reed.co.uk/api/1.0/search?resultsToSkip={(searchVM.Page - 1) * 100}";
@@ -281,10 +359,14 @@ namespace JobFinder.Models
             var jsonStream = await reedClient.GetStreamAsync(url);
             var root = await JsonSerializer.DeserializeAsync<ReedRoot>(jsonStream);
 
+
+            CultureInfo salaryCulture = new CultureInfo("en-GB", false);
+            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
+
             var results = new List<Job>();
-            foreach (ReedJob reedJob in root.Jobs)
+            foreach (var reedJob in root.Jobs)
             {
-                results.Add(new Job
+                var job = new Job
                 {
                     Title = reedJob.Title,
                     Description = reedJob.Description,
@@ -293,13 +375,48 @@ namespace JobFinder.Models
                     Location = reedJob.Location,
                     URL = reedJob.URL,
                     MinSalary = (reedJob.MinSalary == null) ? null : Convert.ToInt32(reedJob.MinSalary),
-                    MaxSalary = (reedJob.MaxSalary == null) ? null : Convert.ToInt32(reedJob.MaxSalary)
-                });
+                    MaxSalary = (reedJob.MaxSalary == null) ? null : Convert.ToInt32(reedJob.MaxSalary),
+                    SalaryCulture = salaryCulture
+                };
             }
 
             return results;
         }
 
+        // https://www.themuse.com/developers/api/v2
+        public async Task<List<Job>> GetThemuseAsync(SearchViewModel searchVM)
+        {
+            var url = $"https://www.themuse.com/api/public/jobs?api_key={themuseApiKey}&page={searchVM.Page - 1}" +
+                $"&category={searchVM.ThemuseCategory}";
+            if (searchVM.Location != null)
+                url += $"&location={searchVM.Location}";
+
+
+            var jsonStream = await themuseClient.GetStreamAsync(url);
+            var root = await JsonSerializer.DeserializeAsync<TheMuseRoot>(jsonStream);
+
+            var results = new List<Job>();
+            foreach (var themuseJob in root.Results)
+            {
+                var job = new Job
+                {
+                    Title = themuseJob.Title,
+                    Description = themuseJob.DescriptionHTML,
+                    CreatedAt = themuseJob.CreatedAt,
+                    Company = themuseJob.Company.Name,
+                    URL = themuseJob.Refs.URL
+                };
+
+                if (themuseJob.Locations.Count > 0)
+                    job.Location = themuseJob.Locations[0].Location;
+
+                results.Add(job);
+            }
+
+            return results;
+        }
+
+        // https://developer.usajobs.gov/API-Reference/GET-api-Search
         public async Task<List<Job>> GetUsajobsAsync(SearchViewModel searchVM)
         {
             var url = $"https://data.usajobs.gov/api/Search?Page={searchVM.Page}";
@@ -327,9 +444,12 @@ namespace JobFinder.Models
             else if (searchVM.SortDirection == "down")
                 url += "&SortDirection=Desc";
 
-
             var jsonStream = await usajobsClient.GetStreamAsync(url);
             var root = await JsonSerializer.DeserializeAsync<USAJobsRoot>(jsonStream);
+
+
+            var salaryCulture = new CultureInfo("en-US", false);
+            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
 
             var results = new List<Job>();
             foreach (var usajobsJob in root.SearchResult.Jobs)
@@ -343,7 +463,8 @@ namespace JobFinder.Models
                     Location = usajobsJob.Details.Location,
                     URL = usajobsJob.Details.URL,
                     MinSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MinSalary)),
-                    MaxSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MaxSalary))
+                    MaxSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MaxSalary)),
+                    SalaryCulture = salaryCulture
                 };
 
                 switch (usajobsJob.Details.PositionSchedule[0].Code)

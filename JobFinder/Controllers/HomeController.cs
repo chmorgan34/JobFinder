@@ -68,6 +68,17 @@ namespace JobFinder.Controllers
                         failedRequests.Add("Jooble");
                     }
                 }
+                if (searchVM.ThemuseCheck)
+                {
+                    try
+                    {
+                        results.AddRange(await apiHelper.GetThemuseAsync(searchVM));
+                    }
+                    catch (HttpRequestException)
+                    {
+                        failedRequests.Add("The Muse");
+                    }
+                }
                 if (searchVM.ReedCheck)
                 {
                     try
