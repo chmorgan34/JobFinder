@@ -1,4 +1,5 @@
 ﻿using JobFinder.ViewModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JobFinder.Models
 {
-    public class KeywordsValidation : ValidationAttribute
+    public class JoobleKeywordValidation : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -15,7 +16,7 @@ namespace JobFinder.Models
             var keywords = (string)value;
 
             if (searchVM.JoobleCheck && (keywords == null || keywords == string.Empty))
-                return new ValidationResult("Jooble requires a keyword.");
+                return new ValidationResult("Jooble requires at least one keyword.");
             else
                 return ValidationResult.Success;
         }

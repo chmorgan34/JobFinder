@@ -1,4 +1,5 @@
-﻿/* #region
+﻿
+/* #region
     Globals
 */
 .hidden {
@@ -7,12 +8,24 @@
 .red {
     color: red;
 }
-.validationMessage {
+.field-validation-error {
+    display: block;
     margin-top: 0.25rem;
     color: red;
     font-size: 0.85rem;
 }
-.loadingSpinner {
+.validation-summary-errors {
+    color: red;
+}
+    .validation-summary-errors > ul {
+        list-style-type: none;
+        padding-inline-start: 0;
+    }
+
+.fas, .far {
+    margin-right: 0.5rem;
+}
+#loadingSpinner {
     border: 0.25rem solid #f3f3f3;
     border-top: 0.25rem solid #3498db;
     border-radius: 50%;
@@ -31,80 +44,97 @@
 }
 /* #endregion */
 
-/* #region
-    _Layout
-*/
-header {
-    border-bottom: 1px solid black;
-}
-    header > nav#main {
-        display: flex;
-        justify-content: space-between;
+/* #region Shared */
+
+    /* #region
+        _Layout
+    */
+    header {
+        border-bottom: 1px solid black;
     }
-        header > nav#main > ul {
-            font-size: 1.5rem;
-            list-style-type: none;
-            padding-left: 0;
-            margin-block: 0;
+        header > #header-nav {
+            display: flex;
+            justify-content: space-between;
         }
-            header > nav#main > ul > li {
-                display: inline-block;
-            }
-
-        header > nav#main > span {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-main {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-footer {
-    border-top: 1px solid black;
-}
-/* #endregion */
-
-/* #region
-    _JobListPartial
-*/
-table#job-results {
-    width: 100%;
-    border: 1px solid darkgray;
-    border-collapse: collapse;
-}
-    table#job-results > colgroup {}
-        table#job-results > colgroup > col#description {
-            width: 40%;
-        }
-
-    table#job-results > thead {}
-        table#job-results > thead th {
-            border: 1px solid darkgray;
-            border-collapse: collapse;
-            padding: 0.35rem;
-        }
-
-    table#job-results > tbody {}
-        table#job-results > tbody td {
-            border: 1px solid darkgray;
-            border-collapse: collapse;
-            padding: 0.35rem;
-        }
-            table#job-results > tbody td.jobType, td.createdAt, td.salary {
-                white-space: nowrap;
-            }
-            table#job-results > tbody td > details > summary {
+            header > #header-nav > #site-title {
+                font-size: 2.5rem;
+                font-weight: bold;
                 cursor: pointer;
             }
+            header > #header-nav > div {
+                display: flex;
+                align-items: center;
+            }
+                header > #header-nav > div > form {
+                    display: inline;
+                }
+                    header > #header-nav > div > form > button {
+                        font-size: 1.15rem;
+                        margin-left: 0.25rem;
+                        margin-right: 0.25rem;
+                    }
+
+    main {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    footer {
+        border-top: 1px solid black;
+    }
+    /* #endregion */
+
+    /* #region
+        _JobListPartial
+    */
+    table#job-results {
+        width: 100%;
+        border: 1px solid darkgray;
+        border-collapse: collapse;
+    }
+        table#job-results > colgroup {}
+            table#job-results > colgroup > col#description {
+                width: 40%;
+            }
+
+        table#job-results > thead {}
+            table#job-results > thead th {
+                border: 1px solid darkgray;
+                border-collapse: collapse;
+                padding: 0.35rem;
+            }
+
+        table#job-results > tbody {}
+            table#job-results > tbody td {
+                border: 1px solid darkgray;
+                border-collapse: collapse;
+                padding: 0.35rem;
+            }
+                table#job-results > tbody td.jobType,
+                table#job-results > tbody td.createdAt,
+                table#job-results > tbody td.salary {
+                    white-space: nowrap;
+                }
+                table#job-results > tbody td > details > summary {
+                    cursor: pointer;
+                }
+    /* #endregion */
+
 /* #endregion */
 
 /* #region
-    Home Index (search page)
+    Home
 */
+
+    /* #region
+        Index (search page)
+    */
     #search-container {
         display: flex;
     }
+        #search-container ul {
+            margin-block-start: 0;
+        }
+
         /* #region
             Input section
         */
@@ -129,11 +159,11 @@ table#job-results {
                     }
 
                     /* #region
-                        Search params fieldset
+                        Search params
                     */
                     #search-container > section#input > form > fieldset#search-params {}
                         #search-container > section#input > form > fieldset#search-params > .searchParam {
-                            margin-bottom: 0.75rem;
+                            margin-bottom: 0.5rem;
                         }
                             #search-container > section#input > form > fieldset#search-params > .searchParam > * {
                                 display: block;
@@ -165,7 +195,6 @@ table#job-results {
                             margin-bottom: 0.5rem;
                         }
                             #search-container > section#input > form > fieldset#search-params #requirements > ul {
-                                margin-block: 0;
                                 padding-inline-start: 0.75rem;
                             }
 
@@ -183,7 +212,6 @@ table#job-results {
 
         /* #endregion */
 
-
         /* Output section */
         #search-container > section#output {
             flex-grow: 1;
@@ -195,4 +223,79 @@ table#job-results {
             #search-container > section#output > span#no-results {
                 margin-bottom: 1rem;
             }
+
+    /* #endregion */
+
+/* #endregion */
+
+/* #region
+    Account
+*/
+
+    /* #region
+        Login + Register
+    */
+    #login-register-container {
+        display: flex;
+        justify-content: center;
+        margin-right: 7.5rem;
+    }
+        #login-register-container > form {}
+            #login-register-container > form > div {
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+    /* #endregion */
+
+    /* #region
+        AccessDenied
+    */
+    #access-denied-container > h1 {
+        text-align: center;
+    }
+
+    /* #endregion */
+
+/* #endregion */
+
+/* #region
+    Settings
+*/
+
+    /* #region
+        _Layout
+    */
+    #settings-container {
+        display: flex;
+    }
+        #settings-container > nav {
+            padding-right: 1rem;
+            border-right: 1px solid black;
+            margin-right: 1rem;
+        }
+            #settings-container > nav > a {
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+
+        #settings-container h2 {
+            margin-block-start: 0;
+        }
+
+    /* #endregion */
+
+        /* #region
+            ChangePassword
+        */
+        #settings-container > #change-password {
+            text-align: center;
+        }
+            #settings-container > #change-password > form {}
+                #settings-container > #change-password > form > div {
+                    margin-bottom: 0.5rem;
+                }
+
+        /* #endregion*/
+
 /* #endregion */

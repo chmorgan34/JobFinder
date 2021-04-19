@@ -4,31 +4,47 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@ViewData["Title"] - JobFinder</title>
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     </head>
 
     <body>
         <header>
-            <nav id="main">
-                <ul>
-                    <li><a href="/">Search</a></li>
+            <nav id="header-nav">
+                <div>
+                    <form asp-route="Index" method="get">
+                        <button type="submit"><i class="fas fa-search"></i>Search</button>
+                    </form>
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <li><a href="#">My jobs</a></li>
+                        <form method="get">
+                            <button type="submit"><i class="fas fa-archive"></i>My jobs</button>
+                        </form>
                     }
-                </ul>
-                <span>JobFinder</span>
-                <ul>
+                </div>
+                <span id="site-title" onclick="javascript: location.href = '@Url.Action("Index", "Home")'">
+                    JobFinder
+                </span>
+                <div>
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <li><a href="#">Settings</a></li>
+                        <form asp-controller="Settings" asp-action="ChangePassword" method="get">
+                            <button type="submit"><i class="fas fa-cog"></i>Settings</button>
+                        </form>
+                        <form asp-route="Logout" method="post">
+                            <button type="submit"><i class="fas fa-sign-out-alt"></i>Log out</button>
+                        </form>
                     }
                     else
                     {
-                        <li><a href="#">Sign in</a></li>
-                        <li><a href="#">Register</a></li>
+                        <form asp-route="Login" method="get">
+                            <button type="submit"><i class="fas fa-sign-in-alt"></i>Log in</button>
+                        </form>
+                        <form asp-route="Register" method="get">
+                            <button type="submit"><i class="fas fa-user-plus"></i>Register</button>
+                        </form>
                     }
-                </ul>
+                </div>
             </nav>
         </header>
 

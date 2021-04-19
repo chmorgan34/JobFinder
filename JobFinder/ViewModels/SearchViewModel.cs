@@ -22,7 +22,7 @@ namespace JobFinder.ViewModels
         public bool AdzunaCheck { get; set; } = true;
 
         [Display(Name = "GitHub Jobs")]
-        public bool GithubCheck { get; set; } = true;
+        public bool GithubjobsCheck { get; set; } = true;
 
         [Display(Name = "Jooble")]
         public bool JoobleCheck { get; set; } = true;
@@ -45,17 +45,19 @@ namespace JobFinder.ViewModels
         [Display(Name = "Category")]
         public string ThemuseCategory { get; set; } = "Software Engineer";
 
-        [KeywordsValidation]
+        [JoobleKeywordValidation]
+        [Display(Prompt = ".NET developer")]
         public string Keywords { get; set; }
 
+        [Display(Prompt = "Tempe, AZ")]
         public string Location { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Can't be less than 1.")]
-        [Display(Name = "Distance (in miles)")]
+        [Display(Name = "Distance (in miles)", Prompt = "5")]
         public int? MilesAway { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Can't be less than 0.")]
-        [Display(Name = "Minimum salary")]
+        [Display(Name = "Minimum salary", Prompt = "75000")]
         public int? MinSalary { get; set; }
 
         [Display(Name = "Full-time only")]

@@ -3,7 +3,7 @@
     ViewData["Title"] = "Search";
 
     var adzunaHidden = Model.AdzunaCheck ? string.Empty : "hidden";
-    var githubHidden = Model.GithubCheck ? string.Empty : "hidden";
+    var githubHidden = Model.GithubjobsCheck ? string.Empty : "hidden";
     var joobleHidden = Model.JoobleCheck ? string.Empty : "hidden";
     var themuseHidden = Model.ThemuseCheck ? string.Empty : "hidden";
 }
@@ -11,33 +11,33 @@
 
 <div id="search-container">
     <section id="input">
-        <form asp-action="Search" method="get">
+        <form asp-route="Search" method="get">
             <fieldset id="job-boards">
                 <legend>Select job boards to include</legend>
 
                 <div>
-                    <input asp-for="AdzunaCheck" type="checkbox" />
+                    <input asp-for="AdzunaCheck" />
                     <label asp-for="AdzunaCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="GithubCheck" type="checkbox" />
-                    <label asp-for="GithubCheck"></label>
+                    <input asp-for="GithubjobsCheck" />
+                    <label asp-for="GithubjobsCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="JoobleCheck" type="checkbox" />
+                    <input asp-for="JoobleCheck" />
                     <label asp-for="JoobleCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="ThemuseCheck" type="checkbox" />
+                    <input asp-for="ThemuseCheck" />
                     <label asp-for="ThemuseCheck"></label>
                 </div>
                 <div>
-                    <input asp-for="UsajobsCheck" type="checkbox" />
+                    <input asp-for="UsajobsCheck" />
                     <label asp-for="UsajobsCheck"></label>
                     <sup>USA only</sup>
                 </div>
                 <div>
-                    <input asp-for="ReedCheck" type="checkbox" />
+                    <input asp-for="ReedCheck" />
                     <label asp-for="ReedCheck"></label>
                     <sup>UK only</sup>
                 </div>
@@ -50,17 +50,15 @@
                     <span>
                         <span class="red">*</span>
                         <label asp-for="AdzunaCountry"></label>
-                        <sup>(for Adzuna)</sup>
                     </span>
                     <select asp-for="AdzunaCountry" asp-items="Model.Countries"></select>
-                    <span asp-validation-for="AdzunaCountry" class="validationMessage"></span>
+                    <span asp-validation-for="AdzunaCountry"></span>
                 </div>
 
                 <div class="searchParam themuseReq @themuseHidden">
                     <span>
                         <span class="red">*</span>
                         <label asp-for="ThemuseCategory"></label>
-                        <sup>(for The Muse)</sup>
                     </span>
                     <select asp-for="ThemuseCategory" asp-items="Model.ThemuseCategories"></select>
                 </div>
@@ -71,13 +69,13 @@
                         <label asp-for="Keywords"></label>
                         <sup class="themuseNote @themuseHidden">M</sup>
                     </span>
-                    <input asp-for="Keywords" type="text" placeholder=".NET developer" />
-                    <span asp-validation-for="Keywords" class="validationMessage"></span>
+                    <input asp-for="Keywords" />
+                    <span asp-validation-for="Keywords"></span>
                 </div>
 
                 <div class="searchParam">
                     <label asp-for="Location"></label>
-                    <input asp-for="Location" type="text" placeholder="Tempe, AZ" />
+                    <input asp-for="Location" />
                 </div>
 
                 <div class="searchParam">
@@ -86,8 +84,8 @@
                         <sup class="githubNote @githubHidden">G</sup>
                         <sup class="themuseNote @themuseHidden">M</sup>
                     </span>
-                    <input asp-for="MilesAway" type="number" placeholder="5" />
-                    <span asp-validation-for="MilesAway" class="validationMessage"></span>
+                    <input asp-for="MilesAway" />
+                    <span asp-validation-for="MilesAway"></span>
                 </div>
 
                 <div class="searchParam">
@@ -96,20 +94,20 @@
                         <sup class="githubNote @githubHidden">G</sup>
                         <sup class="themuseNote @themuseHidden">M</sup>
                     </span>
-                    <input asp-for="MinSalary" type="number" placeholder="75000" />
-                    <span asp-validation-for="MinSalary" class="validationMessage"></span>
+                    <input asp-for="MinSalary" />
+                    <span asp-validation-for="MinSalary"></span>
                 </div>
 
                 <div class="searchParam">
                     <div>
-                        <input asp-for="FullTimeOnly" type="checkbox" />
+                        <input asp-for="FullTimeOnly" />
                         <span>
                             <label asp-for="FullTimeOnly"></label>
                             <sup class="themuseNote @themuseHidden">M</sup>
                         </span>
                     </div>
                     <div>
-                        <input asp-for="PermanentOnly" type="checkbox" />
+                        <input asp-for="PermanentOnly" />
                         <span>
                             <label asp-for="PermanentOnly"></label>
                             <sup class="githubNote @githubHidden">G</sup>
@@ -132,9 +130,9 @@
                             <span class="red">*</span>
                             <label asp-for="Page"></label>
                         </span>
-                        <input asp-for="Page" type="number" placeholder="1" />
+                        <input asp-for="Page" />
                     </div>
-                    <span asp-validation-for="Page" class="validationMessage"></span>
+                    <span asp-validation-for="Page"></span>
                 </div>
 
                 <div>
@@ -164,7 +162,7 @@
             </fieldset>
 
             <div id="submit">
-                <input type="submit" value="Search" />
+                <button type="submit"><i class="fas fa-search"></i>Search</button>
             </div>
         </form>
     </section>
@@ -182,7 +180,7 @@
             }
             if (Model.FailedRequests.Count > 0)
             {
-                <div>
+                <div id="failed-requests">
                     There was a problem accessing the following job boards:
                     <ul>
                         @foreach (var jobBoard in Model.FailedRequests)
@@ -204,12 +202,12 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    
+
     <!-- Show loading spinner on form submit -->
     <script>
         const outputSection = $('section#output');
         function showLoadingSpinner() {
-            outputSection.html('<div class="loadingSpinner"></div>');
+            outputSection.html('<div id="loadingSpinner"></div>');
         }
 
         $('section#input form').submit(function () {
@@ -225,7 +223,7 @@
         });
     </script>
 
-    <!-- Show/hide form requirements on job board check -->
+    <!-- Show/hide form requirements on job board check/uncheck -->
     <script>
         const adzunaReqs = $('.adzunaReq');
         const joobleReqs = $('.joobleReq');
@@ -249,7 +247,7 @@
                 joobleReqs.addClass('hidden');
             }
         });
-        $('input#GithubCheck').change(function () {
+        $('input#GithubjobsCheck').change(function () {
             if (this.checked) {
                 githubNotes.removeClass('hidden');
             }

@@ -21,13 +21,13 @@ namespace JobFinder.Controllers
             this.apiHelper = apiHelper;
         }
 
-        [Route("")]
+        [Route("", Name = "Index")]
         public IActionResult Index()
         {
             return View(new SearchViewModel());
         }
 
-        [Route("Search")]
+        [Route("Search", Name = "Search")]
         public async Task<IActionResult> Search(SearchViewModel searchVM)
         {
             if (ModelState.IsValid)
@@ -46,7 +46,7 @@ namespace JobFinder.Controllers
                         failedRequests.Add("Adzuna");
                     }
                 }
-                if (searchVM.GithubCheck)
+                if (searchVM.GithubjobsCheck)
                 {
                     try
                     {
@@ -124,7 +124,8 @@ namespace JobFinder.Controllers
             return View("Index", searchVM);
         }
 
-        [Route("Error")]
+
+        [Route("Error", Name = "Error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -28,7 +28,7 @@ namespace JobFinder.Models
     public class ApiHelper : IApiHelper
     {
         private readonly HttpClient adzunaClient;
-        private readonly HttpClient githubClient;
+        private readonly HttpClient githubjobsClient;
         private readonly HttpClient joobleClient;
         private readonly HttpClient reedClient;
         private readonly HttpClient themuseClient;
@@ -48,8 +48,8 @@ namespace JobFinder.Models
             this.adzunaAppID = adzunaAppID;
             this.adzunaAppKey = adzunaAppKey;
 
-            githubClient = new HttpClient();
-            githubClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
+            githubjobsClient = new HttpClient();
+            githubjobsClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
 
             joobleClient = new HttpClient();
             joobleClient.DefaultRequestHeaders.Accept.Add(jsonHeader);
@@ -212,7 +212,7 @@ namespace JobFinder.Models
                 url += "&full_time=on";
 
 
-            var jsonStream = await githubClient.GetStreamAsync(url);
+            var jsonStream = await githubjobsClient.GetStreamAsync(url);
             var githubJobs = await JsonSerializer.DeserializeAsync<List<GithubJob>>(jsonStream);
 
             var results = new List<Job>();
@@ -288,7 +288,6 @@ namespace JobFinder.Models
                     SalaryCulture = salaryCulture
                 };
 
-
                 var salaryStr = joobleJob.SalaryString;
                 var isHourly = salaryStr.Contains("per hour");
                 salaryStr = salaryStr.Replace("per hour", string.Empty);
@@ -311,7 +310,6 @@ namespace JobFinder.Models
                     default:
                         break;
                 }
-
 
                 switch (joobleJob.JobType)
                 {
@@ -366,7 +364,7 @@ namespace JobFinder.Models
             var results = new List<Job>();
             foreach (var reedJob in root.Jobs)
             {
-                var job = new Job
+                results.Add(new Job
                 {
                     Title = reedJob.Title,
                     Description = reedJob.Description,
@@ -377,7 +375,7 @@ namespace JobFinder.Models
                     MinSalary = (reedJob.MinSalary == null) ? null : Convert.ToInt32(reedJob.MinSalary),
                     MaxSalary = (reedJob.MaxSalary == null) ? null : Convert.ToInt32(reedJob.MaxSalary),
                     SalaryCulture = salaryCulture
-                };
+                });
             }
 
             return results;
@@ -398,19 +396,15 @@ namespace JobFinder.Models
             var results = new List<Job>();
             foreach (var themuseJob in root.Results)
             {
-                var job = new Job
+                results.Add(new Job
                 {
                     Title = themuseJob.Title,
                     Description = themuseJob.DescriptionHTML,
                     CreatedAt = themuseJob.CreatedAt,
                     Company = themuseJob.Company.Name,
+                    Location = (themuseJob.Locations.Count > 0) ? themuseJob.Locations[0].Location : null,
                     URL = themuseJob.Refs.URL
-                };
-
-                if (themuseJob.Locations.Count > 0)
-                    job.Location = themuseJob.Locations[0].Location;
-
-                results.Add(job);
+                });
             }
 
             return results;

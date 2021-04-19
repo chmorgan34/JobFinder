@@ -33,7 +33,7 @@ namespace JobFinder
                 adzunaAppKey: Configuration["AdzunaAppKey"],
                 joobleApiKey: Configuration["JoobleApiKey"],
                 reedApiKey: Configuration["ReedApiKey"],
-                themuseApiKey: Configuration["TheMuseApiKey"],
+                themuseApiKey: Configuration["ThemuseApiKey"],
                 usajobsApiKey: Configuration["UsajobsApiKey"],
                 usajobsUserAgent: Configuration["UsajobsUserAgent"]));
 
@@ -42,9 +42,28 @@ namespace JobFinder
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             services.AddControllersWithViews();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
+                options.AccessDeniedPath = "/AccessDenied";
+                options.ReturnUrlParameter = "returnUrl";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -72,7 +91,6 @@ namespace JobFinder
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action}");
-                endpoints.MapRazorPages();
             });
         }
     }
