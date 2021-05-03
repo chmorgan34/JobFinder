@@ -152,8 +152,6 @@ namespace JobFinder.Models
                 default:
                     throw new Exception("Adzuna country does not exist.");
             }
-            var salaryCulture = new CultureInfo(cultureName, false);
-            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
 
             var results = new List<Job>();
             foreach (var adzunaJob in root.Jobs)
@@ -168,7 +166,7 @@ namespace JobFinder.Models
                     URL = adzunaJob.URL,
                     MinSalary = adzunaJob.MinSalary,
                     MaxSalary = adzunaJob.MaxSalary,
-                    SalaryCulture = salaryCulture
+                    CultureName = cultureName
                 };
 
                 switch (adzunaJob.ContractTime)
@@ -266,9 +264,6 @@ namespace JobFinder.Models
             var root = await JsonSerializer.DeserializeAsync<JoobleRoot>(jsonStream);
 
 
-            var salaryCulture = new CultureInfo("en-US", false);
-            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
-
             var results = new List<Job>();
             foreach (var joobleJob in root.Jobs)
             {
@@ -285,7 +280,7 @@ namespace JobFinder.Models
                     Company = joobleJob.Company,
                     Location = joobleJob.Location,
                     URL = joobleJob.URL,
-                    SalaryCulture = salaryCulture
+                    CultureName = "en-US"
                 };
 
                 var salaryStr = joobleJob.SalaryString;
@@ -358,9 +353,6 @@ namespace JobFinder.Models
             var root = await JsonSerializer.DeserializeAsync<ReedRoot>(jsonStream);
 
 
-            CultureInfo salaryCulture = new CultureInfo("en-GB", false);
-            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
-
             var results = new List<Job>();
             foreach (var reedJob in root.Jobs)
             {
@@ -374,7 +366,7 @@ namespace JobFinder.Models
                     URL = reedJob.URL,
                     MinSalary = (reedJob.MinSalary == null) ? null : Convert.ToInt32(reedJob.MinSalary),
                     MaxSalary = (reedJob.MaxSalary == null) ? null : Convert.ToInt32(reedJob.MaxSalary),
-                    SalaryCulture = salaryCulture
+                    CultureName = "en-GB"
                 });
             }
 
@@ -442,9 +434,6 @@ namespace JobFinder.Models
             var root = await JsonSerializer.DeserializeAsync<USAJobsRoot>(jsonStream);
 
 
-            var salaryCulture = new CultureInfo("en-US", false);
-            salaryCulture.NumberFormat.CurrencyDecimalDigits = 0;
-
             var results = new List<Job>();
             foreach (var usajobsJob in root.SearchResult.Jobs)
             {
@@ -458,7 +447,7 @@ namespace JobFinder.Models
                     URL = usajobsJob.Details.URL,
                     MinSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MinSalary)),
                     MaxSalary = Convert.ToInt32(Convert.ToDouble(usajobsJob.Details.SalaryRange[0].MaxSalary)),
-                    SalaryCulture = salaryCulture
+                    CultureName = "en-US"
                 };
 
                 switch (usajobsJob.Details.PositionSchedule[0].Code)

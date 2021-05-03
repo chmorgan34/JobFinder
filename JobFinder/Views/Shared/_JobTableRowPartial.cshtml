@@ -1,0 +1,108 @@
+﻿@model JobTableRowViewModel
+
+@{
+    System.Globalization.CultureInfo culture = null;
+    if (!string.IsNullOrWhiteSpace(Model.Job.CultureName))
+    {
+        culture = System.Globalization.CultureInfo.CreateSpecificCulture(Model.Job.CultureName);
+        culture.NumberFormat.CurrencyDecimalDigits = 0;
+    }
+}
+
+
+<tr>
+    <td>@Html.Raw(Model.Job.Title)</td>
+    <td class="description">
+        <details>
+            <summary>Click to expand</summary>
+            <hr />
+            <p>@Html.Raw(Model.Job.Description)</p>
+        </details>
+    </td>
+    <td class="createdAt">
+        <time datetime="@Model.Job.CreatedAt">
+            <span>@Model.Job.CreatedAt.ToShortDateString()</span>
+            <br />
+            @if (Model.Job.CreatedAt.TimeOfDay != TimeSpan.Zero)
+            {
+                <span>@Model.Job.CreatedAt.ToShortTimeString()</span>
+            }
+        </time>
+    </td>
+    <td class="jobType">
+        @if (Model.Job.Schedule != null)
+        {
+            <span>@Model.Job.GetScheduleString()</span>
+            <br />
+        }
+        <span>@Model.Job.EmploymentType</span>
+    </td>
+    <td class="salary">
+        @if (Model.Job.MinSalary != null && culture != null)
+        {
+            <span>@string.Format(culture, "{0:C}", Model.Job.MinSalary)</span>
+        }
+    </td>
+    <td class="salary">
+        @if (Model.Job.MaxSalary != null && culture != null)
+        {
+            <span>@string.Format(culture, "{0:C}", Model.Job.MaxSalary)</span>
+        }
+    </td>
+    <td>@Model.Job.Location</td>
+    <td>@Model.Job.Company</td>
+    <td>
+        <a href="@Model.Job.URL">Link</a>
+    </td>
+    <td class="save">
+        <details>
+            <summary>Add to</summary>
+            <hr />
+            <form asp-controller="MyJobs" asp-action="ChangeSaveCategory" method="post">
+                <div class="hidden">
+                    <input asp-for="Job.ID" type="hidden" />
+                    <input asp-for="Job.Title" type="hidden" />
+                    <input asp-for="Job.Description" type="hidden" />
+                    <input asp-for="Job.CreatedAt" type="hidden" />
+                    <input asp-for="Job.Company" type="hidden" />
+                    <input asp-for="Job.Location" type="hidden" />
+                    <input asp-for="Job.URL" type="hidden" />
+                    <input asp-for="Job.MinSalary" type="hidden" />
+                    <input asp-for="Job.MaxSalary" type="hidden" />
+                    <input asp-for="Job.CultureName" type="hidden" />
+                    <input asp-for="Job.Schedule" type="hidden" />
+                    <input asp-for="Job.EmploymentType" type="hidden" />
+                    <input asp-for="Job.UsersSavedBy" type="hidden" />
+                    <input asp-for="Job.UsersAppliedBy" type="hidden" />
+                    <input asp-for="Job.UsersInterviewing" type="hidden" />
+                    <input asp-for="Job.UsersOfferedTo" type="hidden" />
+                </div>
+
+                <div>
+                    <input asp-for="SavedCheck" />
+                    <label asp-for="SavedCheck"></label>
+                </div>
+                <div>
+                    <input asp-for="AppliedCheck" />
+                    <label asp-for="AppliedCheck"></label>
+                </div>
+                <div>
+                    <input asp-for="InterviewingCheck" />
+                    <label asp-for="InterviewingCheck"></label>
+                </div>
+                <div>
+                    <input asp-for="OfferedCheck" />
+                    <label asp-for="OfferedCheck"></label>
+                </div>
+                <div class="jobSaveSubmit">
+                    <button type="submit">
+                        <i class="fas fa-save"></i>
+                        <span>Save changes</span>
+                    </button>
+
+                    <div class="saveProgress"></div>
+                </div>
+            </form>
+        </details>
+    </td>
+</tr>

@@ -2,6 +2,19 @@
 /* #region
     Globals
 */
+.sidenavLayout {
+    display: flex;
+}
+    .sidenavLayout > nav {
+        padding-right: 1rem;
+        border-right: 1px solid black;
+        margin-right: 1rem;
+    }
+        .sidenavLayout > nav > a {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
 .hidden {
     display: none !important;
 }
@@ -23,8 +36,9 @@
     }
 
 .fas, .far {
-    margin-right: 0.5rem;
+    margin-right: 0.25rem;
 }
+
 #loadingSpinner {
     border: 0.25rem solid #f3f3f3;
     border-top: 0.25rem solid #3498db;
@@ -42,190 +56,6 @@
         transform: rotate(360deg);
     }
 }
-/* #endregion */
-
-/* #region Shared */
-
-    /* #region
-        _Layout
-    */
-    header {
-        border-bottom: 1px solid black;
-    }
-        header > #header-nav {
-            display: flex;
-            justify-content: space-between;
-        }
-            header > #header-nav > #site-title {
-                font-size: 2.5rem;
-                font-weight: bold;
-                cursor: pointer;
-            }
-            header > #header-nav > div {
-                display: flex;
-                align-items: center;
-            }
-                header > #header-nav > div > form {
-                    display: inline;
-                }
-                    header > #header-nav > div > form > button {
-                        font-size: 1.15rem;
-                        margin-left: 0.25rem;
-                        margin-right: 0.25rem;
-                    }
-
-    main {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-    footer {
-        border-top: 1px solid black;
-    }
-    /* #endregion */
-
-    /* #region
-        _JobListPartial
-    */
-    table#job-results {
-        width: 100%;
-        border: 1px solid darkgray;
-        border-collapse: collapse;
-    }
-        table#job-results > colgroup {}
-            table#job-results > colgroup > col#description {
-                width: 40%;
-            }
-
-        table#job-results > thead {}
-            table#job-results > thead th {
-                border: 1px solid darkgray;
-                border-collapse: collapse;
-                padding: 0.35rem;
-            }
-
-        table#job-results > tbody {}
-            table#job-results > tbody td {
-                border: 1px solid darkgray;
-                border-collapse: collapse;
-                padding: 0.35rem;
-            }
-                table#job-results > tbody td.jobType,
-                table#job-results > tbody td.createdAt,
-                table#job-results > tbody td.salary {
-                    white-space: nowrap;
-                }
-                table#job-results > tbody td > details > summary {
-                    cursor: pointer;
-                }
-    /* #endregion */
-
-/* #endregion */
-
-/* #region
-    Home
-*/
-
-    /* #region
-        Index (search page)
-    */
-    #search-container {
-        display: flex;
-    }
-        #search-container ul {
-            margin-block-start: 0;
-        }
-
-        /* #region
-            Input section
-        */
-        #search-container > section#input {
-            min-width: max-content;
-            padding-right: 0.75rem;
-            border-right: 1px solid black;
-            margin-right: 0.75rem;
-        }
-            /* Form */
-            #search-container > section#input > form {}
-
-                /* #region
-                    Fieldsets
-                */
-                #search-container > section#input > form > fieldset {
-                    margin-bottom: 0.5rem;
-                }
-                    #search-container > section#input > form > fieldset sup {
-                        font-size: 0.7em;
-                        font-style: italic;
-                    }
-
-                    /* #region
-                        Search params
-                    */
-                    #search-container > section#input > form > fieldset#search-params {}
-                        #search-container > section#input > form > fieldset#search-params > .searchParam {
-                            margin-bottom: 0.5rem;
-                        }
-                            #search-container > section#input > form > fieldset#search-params > .searchParam > * {
-                                display: block;
-                            }
-                            #search-container > section#input > form > fieldset#search-params > .searchParam > select {
-                                max-width: 11rem;
-                            }
-                            #search-container > section#input > form > fieldset#search-params > .searchParam > input#MilesAway {
-                                width: 3rem;
-                            }
-                            #search-container > section#input > form > fieldset#search-params > .searchParam > input#MinSalary {
-                                width: 5rem;
-                            }
-
-                        /* Page num */
-                        #search-container > section#input > form > fieldset#search-params > div#page-num {
-                            text-align: center;
-                            padding-bottom: 0.75rem;
-                            border-bottom: 1px solid black;
-                            margin-bottom: 0.75rem;
-                        }
-                            #search-container > section#input > form > fieldset#search-params > div#page-num input#Page {
-                                width: 3rem;
-                            }
-
-                        /* Requirements */
-                        #search-container > section#input > form > fieldset#search-params #requirements {
-                            font-size: 0.8rem;
-                            margin-bottom: 0.5rem;
-                        }
-                            #search-container > section#input > form > fieldset#search-params #requirements > ul {
-                                padding-inline-start: 0.75rem;
-                            }
-
-                        /* Notes */
-                        #search-container > section#input > form > fieldset#search-params #notes {
-                            font-size: 0.8rem;
-                        }
-
-                    /* #endregion */
-                /* #endregion */
-
-                #search-container > section#input > form > div#submit {
-                    text-align: center;
-                }
-
-        /* #endregion */
-
-        /* Output section */
-        #search-container > section#output {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-            #search-container > section#output > span#no-results {
-                margin-bottom: 1rem;
-            }
-
-    /* #endregion */
-
 /* #endregion */
 
 /* #region
@@ -260,25 +90,142 @@
 /* #endregion */
 
 /* #region
+    Home
+*/
+
+    /* #region
+        Index (search page)
+    */
+    #search-container {
+        display: flex;
+    }
+        #search-container ul {
+            margin-block-start: 0;
+        }
+
+        /* #region
+            Input section
+        */
+        #search-container > #input-section {
+            min-width: max-content;
+            padding-right: 0.75rem;
+            border-right: 1px solid black;
+            margin-right: 0.75rem;
+        }
+            /* Form */
+            #search-container > #input-section > form {}
+
+                /* #region
+                    Fieldsets
+                */
+                #search-container > #input-section > form > fieldset {
+                    margin-bottom: 0.5rem;
+                }
+                    #search-container > #input-section > form > fieldset sup {
+                        font-size: 0.7em;
+                        font-style: italic;
+                    }
+
+                    /* #region
+                        Search params
+                    */
+                    #search-container > #input-section > form > #search-params {}
+                        #search-container > #input-section > form > #search-params > .searchParam {
+                            margin-bottom: 0.5rem;
+                        }
+                            #search-container > #input-section > form > #search-params > .searchParam > * {
+                                display: block;
+                            }
+                            #search-container > #input-section > form > #search-params > .searchParam > select {
+                                max-width: 11rem;
+                            }
+                            #search-container > #input-section > form > #search-params > .searchParam > input#MilesAway {
+                                width: 3rem;
+                            }
+                            #search-container > #input-section > form > #search-params > .searchParam > input#MinSalary {
+                                width: 5rem;
+                            }
+
+                        /* Page num */
+                        #search-container > #input-section > form > #search-params > div#page-num {
+                            text-align: center;
+                            padding-bottom: 0.75rem;
+                            border-bottom: 1px solid black;
+                            margin-bottom: 0.75rem;
+                        }
+                            #search-container > #input-section > form > #search-params > div#page-num input#Page {
+                                width: 3rem;
+                            }
+
+                        /* Requirements */
+                        #search-container > #input-section > form > #search-params #requirements {
+                            font-size: 0.8rem;
+                            margin-bottom: 0.5rem;
+                        }
+                            #search-container > #input-section > form > #search-params #requirements > ul {
+                                padding-inline-start: 0.75rem;
+                            }
+
+                        /* Notes */
+                        #search-container > #input-section > form > #search-params #notes {
+                            font-size: 0.8rem;
+                        }
+
+                    /* #endregion */
+                /* #endregion */
+
+                #search-container > #input-section > form > #search-submit {
+                    text-align: center;
+                }
+                    #search-container > #input-section > form > #search-submit > button {
+                        font-size: 1rem;
+                    }
+
+        /* #endregion */
+
+        /* Output section */
+        #search-container > #output-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+            #search-container > #output-section > #no-results {
+                margin-bottom: 1rem;
+            }
+
+    /* #endregion */
+
+/* #endregion */
+
+/* #region
+    MyJobs
+*/
+
+    /* #region
+        MyJobs
+    */
+    #myjobs-container {}
+        #myjobs-container > div {
+            flex-grow: 1;
+        }
+        #myjobs-container h2 {
+            margin-block-start: 0;
+        }
+
+    /* #endregion */
+
+/* #endregion */
+
+/* #region
     Settings
 */
 
     /* #region
         _Layout
     */
-    #settings-container {
-        display: flex;
-    }
-        #settings-container > nav {
-            padding-right: 1rem;
-            border-right: 1px solid black;
-            margin-right: 1rem;
-        }
-            #settings-container > nav > a {
-                display: block;
-                margin-bottom: 0.5rem;
-            }
-
+    #settings-container {}
         #settings-container h2 {
             margin-block-start: 0;
         }
@@ -297,5 +244,96 @@
                 }
 
         /* #endregion*/
+
+/* #endregion */
+
+/* #region
+    Shared
+*/
+
+    /* #region
+        _Layout
+    */
+    header {
+        border-bottom: 1px solid black;
+    }
+        header > #header-nav {
+            display: flex;
+            justify-content: space-between;
+        }
+            header > #header-nav > #site-title {
+                font-size: 2.5rem;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            header > #header-nav > div {
+                display: flex;
+                align-items: center;
+            }
+                header > #header-nav > div > form {
+                    display: inline;
+                }
+                    header > #header-nav > div > form > button {
+                        font-size: 1.25rem;
+                        margin-left: 0.25rem;
+                        margin-right: 0.25rem;
+                    }
+
+    main {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    footer {
+        border-top: 1px solid black;
+        text-align: center;
+    }
+    /* #endregion */
+
+    /* #region
+        _JobTablePartial
+    */
+    table#job-results {
+        width: 100%;
+        border: 1px solid darkgray;
+        border-collapse: collapse;
+    }
+        table#job-results > thead {}
+            table#job-results > thead th {
+                border: 1px solid darkgray;
+                border-collapse: collapse;
+                padding: 0.35rem;
+            }
+
+        table#job-results > tbody {}
+            table#job-results > tbody td {
+                border: 1px solid darkgray;
+                border-collapse: collapse;
+                padding: 0.35rem;
+            }
+                table#job-results > tbody td.description {
+                    width: 40%;
+                }
+                table#job-results > tbody td.save {
+                    width: 10%;
+                }
+                    table#job-results > tbody td.save .jobSaveSubmit {
+                        text-align: center;
+                        margin-top: 0.5rem;
+                    }
+                        table#job-results > tbody td.save .jobSaveSubmit > .saveProgress {
+                            font-size: 0.8rem;
+                            margin-top: 0.25rem;
+                        }
+
+                table#job-results > tbody td.jobType,
+                table#job-results > tbody td.createdAt,
+                table#job-results > tbody td.salary,
+                table#job-results > tbody td.save {
+                    white-space: nowrap;
+                }
+                table#job-results > tbody td > details > summary {
+                    cursor: pointer;
+                }
+    /* #endregion */
 
 /* #endregion */

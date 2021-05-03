@@ -1,0 +1,31 @@
+﻿<!-- Change save category AJAX -->
+<script>
+    $('#job-results td.save form').submit(function (event) {
+        event.preventDefault();
+
+        const form = $(this);
+        const url = form.attr('action');
+        const saveProgress = form.find('.saveProgress');
+
+        saveProgress.removeClass('red');
+        saveProgress.html('Saving...');
+
+        $.post(url, form.serialize(), function () {
+            saveProgress.html('Saved!');
+        })
+            .fail(function () {
+                saveProgress.addClass('red');
+                saveProgress.html('Could not save');
+
+                alert('There was an error changing the save category.');
+            });
+    });
+</script>
+
+<!-- "Save all changes" button -->
+<script>
+    $('#job-results button#save-all-changes').click(function () {
+        const forms = $('#job-results td.save form');
+        forms.submit();
+    });
+</script>

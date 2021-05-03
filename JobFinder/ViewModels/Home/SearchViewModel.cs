@@ -11,7 +11,7 @@ namespace JobFinder.ViewModels
     public class SearchViewModel
     {
         // -------------------- Output --------------------
-        public List<Job> Results { get; set; }
+        public List<JobTableRowViewModel> Results { get; set; }
         public List<string> FailedRequests { get; set; }
 
 

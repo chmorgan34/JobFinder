@@ -1,0 +1,30 @@
+﻿@model List<JobTableRowViewModel>
+
+
+<table id="job-results">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>Type</th>
+            <th>Min Salary</th>
+            <th>Max Salary</th>
+            <th>Location</th>
+            <th>Company</th>
+            <th>URL</th>
+            <th>
+                <button id="save-all-changes">
+                    <i class="fas fa-save"></i>
+                    <span>Save all changes</span>
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tableRowVM in Model)
+        {
+            <partial name="_JobTableRowPartial" model="tableRowVM" />
+        }
+    </tbody>
+</table>

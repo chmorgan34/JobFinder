@@ -11,6 +11,8 @@ namespace JobFinder.Models
 
     public class Job
     {
+        public int ID { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -20,9 +22,14 @@ namespace JobFinder.Models
 
         public int? MinSalary { get; set; }
         public int? MaxSalary { get; set; }
-        public CultureInfo SalaryCulture { get; set; }
+        public string CultureName { get; set; }
         public JobSchedule? Schedule { get; set; }
         public EmploymentLength? EmploymentType { get; set; }
+
+        public HashSet<ApplicationUser> UsersSavedBy { get; set; } = new();
+        public HashSet<ApplicationUser> UsersAppliedBy { get; set; } = new();
+        public HashSet<ApplicationUser> UsersInterviewing { get; set; } = new();
+        public HashSet<ApplicationUser> UsersOfferedTo { get; set; } = new();
 
 
         public string GetScheduleString()
@@ -36,6 +43,22 @@ namespace JobFinder.Models
                 default:
                     return null;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !GetType().Equals(obj.GetType()))
+                return false;
+            else
+            {
+                Job j = (Job) obj;
+                return URL == j.URL;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return URL.GetHashCode();
         }
     }
 }

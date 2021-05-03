@@ -23,7 +23,7 @@ namespace JobFinder.Controllers
             this.signInManager = signInManager;
         }
 
-        [Route("Login", Name = "Login")]
+        [Route("Login")]
         public async Task<IActionResult> Login(string returnUrl)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -33,7 +33,7 @@ namespace JobFinder.Controllers
         }
 
         [HttpPost]
-        [Route("Login", Name = "Login")]
+        [Route("Login")]
         public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
             if (ModelState.IsValid)
@@ -49,27 +49,20 @@ namespace JobFinder.Controllers
             return View(loginVM);
         }
 
-
-
         [HttpPost]
         [Authorize]
-        [Route("Logout", Name = "Logout")]
+        [Route("Logout")]
         public async Task<IActionResult> Logout(string returnUrl)
         {
             await signInManager.SignOutAsync();
             return LocalRedirect(returnUrl ?? "/");
         }
 
-
-
-        [Route("Register", Name = "Register")]
-        public IActionResult Register(string returnUrl)
-        {
-            return View(new RegisterViewModel { ReturnUrl = returnUrl ?? "/" });
-        }
+        [Route("Register")]
+        public IActionResult Register(string returnUrl) => View(new RegisterViewModel { ReturnUrl = returnUrl ?? "/" });
 
         [HttpPost]
-        [Route("Register", Name = "Register")]
+        [Route("Register")]
         public async Task<IActionResult> Register(RegisterViewModel registerVM)
         {
             if (ModelState.IsValid)
@@ -89,12 +82,7 @@ namespace JobFinder.Controllers
             return View(registerVM);
         }
 
-
-
-        [Route("AccessDenied", Name = "AccessDenied")]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
+        [Route("AccessDenied")]
+        public IActionResult AccessDenied() => View();
     }
 }

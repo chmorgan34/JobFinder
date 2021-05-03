@@ -22,16 +22,7 @@ namespace JobFinder.Controllers
             this.signInManager = signInManager;
         }
 
-        [Route("{controller}")]
-        public IActionResult Settings()
-        {
-            return RedirectToAction("ChangePassword");
-        }
-
-        public IActionResult ChangePassword()
-        {
-            return View(new ChangePasswordViewModel());
-        }
+        public IActionResult ChangePassword() => View(new ChangePasswordViewModel());
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordVM)

@@ -12,36 +12,57 @@
         <header>
             <nav id="header-nav">
                 <div>
-                    <form asp-route="Index" method="get">
-                        <button type="submit"><i class="fas fa-search"></i>Search</button>
+                    <form asp-controller="Home" asp-action="Index" method="get">
+                        <button type="submit">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </button>
                     </form>
+
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <form method="get">
-                            <button type="submit"><i class="fas fa-archive"></i>My jobs</button>
+                        <form asp-controller="MyJobs" asp-action="Saved" method="get">
+                            <button type="submit">
+                                <i class="fas fa-archive"></i>
+                                <span>My jobs</span>
+                            </button>
                         </form>
                     }
                 </div>
+
                 <span id="site-title" onclick="javascript: location.href = '@Url.Action("Index", "Home")'">
                     JobFinder
                 </span>
+
                 <div>
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <form asp-controller="Settings" asp-action="ChangePassword" method="get">
-                            <button type="submit"><i class="fas fa-cog"></i>Settings</button>
+                            <button type="submit">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </button>
                         </form>
-                        <form asp-route="Logout" method="post">
-                            <button type="submit"><i class="fas fa-sign-out-alt"></i>Log out</button>
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Log out</span>
+                            </button>
                         </form>
                     }
                     else
                     {
-                        <form asp-route="Login" method="get">
-                            <button type="submit"><i class="fas fa-sign-in-alt"></i>Log in</button>
+                        <form asp-controller="Account" asp-action="Login" method="get">
+                            <button type="submit">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Log in</span>
+                            </button>
                         </form>
-                        <form asp-route="Register" method="get">
-                            <button type="submit"><i class="fas fa-user-plus"></i>Register</button>
+                        <form asp-controller="Account" asp-action="Register" method="get">
+                            <button type="submit">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Register</span>
+                            </button>
                         </form>
                     }
                 </div>

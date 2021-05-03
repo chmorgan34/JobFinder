@@ -1,0 +1,24 @@
+﻿@model List<JobTableRowViewModel>
+
+@{ 
+    ViewData["Title"] = "My jobs";
+}
+
+
+<div id="myjobs-container" class="sidenavLayout">
+    <nav>
+        <a asp-action="Saved">Saved</a>
+        <a asp-action="Applied">Applied</a>
+        <a asp-action="Interviewing">Interviewing</a>
+        <a asp-action="Offered">Offered</a>
+    </nav>
+    <div>
+        <h2>@ViewData["MyJobsNav"]</h2>
+        <partial name="_JobTablePartial" model="Model" />
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_JobTableScriptsPartial" />
+}
